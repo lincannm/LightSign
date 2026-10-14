@@ -1,0 +1,12 @@
+{
+  "python": "3.12.14",
+  "platform": "macOS-14.8.9-x86_64-i386-64bit",
+  "opencv": "4.10.0",
+  "pandas": "3.0.6",
+  "sqlite": "3.53.1",
+  "skimage": "0.24.0",
+  "cpu_threads_opencv": 12,
+  "trained_model": "OpenCV pretrained Haar; no new training",
+  "model_bytes": 930127,
+  "model_sha256": "0f7d4527844eb514d4a4948e822da90fbb16a34a0bbbbc6adc6498747a5aafb0"
+}

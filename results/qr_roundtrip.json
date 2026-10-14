@@ -1,0 +1,10 @@
+{
+  "decode_equals_token": true,
+  "verified_checkin": true,
+  "image_shape": [
+    570,
+    570,
+    3
+  ],
+  "payload_characters": 143
+}

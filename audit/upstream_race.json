@@ -1,0 +1,37 @@
+[
+  {
+    "trial": 0,
+    "requests": 8,
+    "accepted": 8,
+    "stored_rows": 8,
+    "method": "barrier after read-before-insert; intentionally aligned race, not production frequency"
+  },
+  {
+    "trial": 1,
+    "requests": 8,
+    "accepted": 8,
+    "stored_rows": 8,
+    "method": "barrier after read-before-insert; intentionally aligned race, not production frequency"
+  },
+  {
+    "trial": 2,
+    "requests": 8,
+    "accepted": 8,
+    "stored_rows": 8,
+    "method": "barrier after read-before-insert; intentionally aligned race, not production frequency"
+  },
+  {
+    "trial": 3,
+    "requests": 8,
+    "accepted": 8,
+    "stored_rows": 8,
+    "method": "barrier after read-before-insert; intentionally aligned race, not production frequency"
+  },
+  {
+    "trial": 4,
+    "requests": 8,
+    "accepted": 8,
+    "stored_rows": 8,
+    "method": "barrier after read-before-insert; intentionally aligned race, not production frequency"
+  }
+]

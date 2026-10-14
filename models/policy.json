@@ -1,0 +1,20 @@
+{
+  "mode": "clahe",
+  "selection": "development F1, then lower MAE, then mode order; test not used",
+  "development": {
+    "split": "development",
+    "mode": "clahe",
+    "condition": "all",
+    "n": 80,
+    "tp": 160,
+    "fp": 0,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "count_mae": 0.0,
+    "count_exact": 1.0,
+    "median_ms": 27.500544500071555,
+    "p95_ms": 36.02609210211085
+  }
+}

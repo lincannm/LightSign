@@ -1,0 +1,30 @@
+{
+  "url": "https://github.com/psesaank/FaceRecognitionAttendance",
+  "commit": "980986f55e69bc5c6125ae81abf190af6755656a",
+  "license": "No LICENSE/COPYING or license grant found; do not redistribute source",
+  "files": {
+    "requirements.txt": "9fcc8684a04b1c071a236b02702c4328282a74eea33200c335f66232772aadc4",
+    "README.md": "cdd471a4a8d8d9badb7afbf873f5f7b3bb5d71a4e4a873b087fb327c623745ff",
+    ".gitignore": "fdbd9255a6be12cd574c780c9614c7b1052013ea16c13c9f31c2bde2e94bf092",
+    "app.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "attendance/README.txt": "bbda48def8042cc8c0c2e2ff3cbaa53fbf941f43b15f17a1ba987a53eaa573e6",
+    "database/README.txt": "1b0c13c46f12a63a016ec79e8a94b801ced068c629988cf63d7b09f5f1988cca",
+    "screenshots/README.txt": "18cce4c9e17d58e31a060d9765617b0b7152395ef3e041e570e5ac9cb89f53e4",
+    "dataset/README.txt": "4c393022e19784d5373216fc222f6b4e9f9d33b2acf3929a0d030e1209589a8c",
+    "trained_model/README.txt": "048dae0ab31c304966999a6be1b261733bd5a063839b2c52a7ce2b88d62cf4c6",
+    "src/face_trainer.py": "702f5e2a45b21590c081994661f307bb285e3060ae6fa54e7ac8b60277c8ac9f",
+    "src/attendance.py": "425d74b968e84d1b3a95e31a69a1a60d0d8ba340d6f880012abd3c0455c4e2a9",
+    "src/database.py": "67b0763f941160436ea10d17a029ba3240480edc04cdae79e8e28a73817fa0d6",
+    "src/utils.py": "cd2ea2d34dbb1af1baae29e38e43b46a03746aa8161812d157759e2abac14af2",
+    "src/main.py": "0b831614ee7f4a409e92a327687ff38e2136d466600e2262cd10db22bda00707",
+    "src/gui.py": "299f0c3c2aeab5be1b758d1600a4da360faca4dbcff96be469b49ba072060b0e",
+    "src/face_detector.py": "25f3b4f4248f96a6fc58039c99de6208ea2c05a0416540687943c535359c99cc",
+    "src/__pycache__/gui.cpython-312.pyc": "e7bd70e0b3f966f8364c6b643ccf4e850797e23ab16c948b9cbe5277bb06ef3c",
+    "src/__pycache__/utils.cpython-312.pyc": "e55eb3f005ad901ff2e971a4967db782ac98ec569fa339903cec9385e3c47f43",
+    "src/__pycache__/face_detector.cpython-312.pyc": "1428269afa9b5f1aac92f16fdb960254938a5622171849d0a61b3a5fb794951a",
+    "src/__pycache__/face_trainer.cpython-312.pyc": "65672a07db9ee4d557336b664f93362cc9ea5073ab16fccce966258aea69d14b",
+    "src/__pycache__/database.cpython-312.pyc": "098b714cc28a6ab11432d993d24f2f766c52f2cfb20a17f5e26fb9d1ec2bb59f"
+  },
+  "models": [],
+  "strategy": "Independent implementation of a non-biometric activity check-in workflow; upstream code and models excluded"
+}
