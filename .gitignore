@@ -5,3 +5,8 @@ __pycache__/
 .DS_Store
 docs/
 AGENTS.md
+
+# SSL 证书和私钥(自签名证书可以重新生成)
+certs/*.pem
+certs/*.key
+certs/*.crt

@@ -22,18 +22,32 @@ def main():
         print(f"错误: 找不到应用文件 {app_file}", file=sys.stderr)
         sys.exit(1)
 
-    # 构建命令
+    # 检查证书文件
+    cert_file = project_root / "certs" / "cert.pem"
+    key_file = project_root / "certs" / "key.pem"
+
+    # 构建命令 - Streamlit 会自动读取 .streamlit/config.toml
     cmd = [
         sys.executable,
         "-m",
         "streamlit",
         "run",
-        str(app_file),
-        "--server.port", "8503",
-        "--server.address", "127.0.0.1"
+        str(app_file)
     ]
 
     print("正在启动 LightSign 轻签系统...")
+    if cert_file.exists() and key_file.exists():
+        print("✓ 已启用 HTTPS 支持")
+        print("  访问地址: https://localhost:8503")
+        print("  局域网访问: https://<本机IP>:8503")
+        print()
+        print("注意: 首次访问需要在浏览器中接受自签名证书")
+        print("  - Chrome/Edge: 点击「高级」→「继续访问」")
+        print("  - Firefox: 点击「高级」→「接受风险并继续」")
+        print("  - Safari: 点击「显示详细信息」→「访问此网站」")
+    else:
+        print("⚠ 未找到 SSL 证书,使用 HTTP 模式")
+        print("  访问地址: http://localhost:8503")
     print()
 
     try:

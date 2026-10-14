@@ -1,0 +1,16 @@
+[server]
+# 启用 HTTPS
+sslCertFile = "certs/cert.pem"
+sslKeyFile = "certs/key.pem"
+
+# 端口配置
+port = 8503
+
+# 允许外部访问(用于手机连接)
+headless = true
+enableCORS = false
+enableXsrfProtection = true
+
+[browser]
+# 自动打开浏览器
+gatherUsageStats = false
