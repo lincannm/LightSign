@@ -8,7 +8,11 @@ python run.py
 
 然后访问: https://localhost:8503
 
-首次访问时点击「高级」→「继续访问」接受证书。
+⚠️ **浏览器会显示证书警告（如 `NET::ERR_CERT_AUTHORITY_INVALID`），这是正常的！** 
+
+点击「高级」→「继续访问」即可。证书是自签名的，但数据传输仍然加密安全。
+
+> Chrome 快捷方式: 在错误页面直接输入 `thisisunsafe`（不显示输入内容）
 
 ## 在手机上扫码
 
