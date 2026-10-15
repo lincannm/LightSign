@@ -97,9 +97,9 @@ with tabs[2]:
  except (UnidentifiedImageError,ValueError,OSError):st.error('图片无法读取,请换个文件试试')
 with tabs[3]:
  st.subheader('签到记录')
- rr=store.rows(c);st.dataframe(pd.DataFrame(rr),use_container_width=True);st.download_button('导出 CSV',pd.DataFrame(rr).to_csv(index=False).encode('utf-8-sig'),'checkins.csv','text/csv');st.download_button('导出 JSON',json.dumps(rr,ensure_ascii=False,indent=2),'checkins.json')
+ rr=store.rows(c);st.dataframe(pd.DataFrame(rr),width='stretch');st.download_button('导出 CSV',pd.DataFrame(rr).to_csv(index=False).encode('utf-8-sig'),'checkins.csv','text/csv');st.download_button('导出 JSON',json.dumps(rr,ensure_ascii=False,indent=2),'checkins.json')
  st.caption('时间为UTC时间戳(秒);系统不保存真实姓名、学号、邮箱或人脸数据。代号经过加密处理,但仍可能被关联。请妥善保管runtime目录。')
  with st.expander('测试数据与技术说明'):
-  st.subheader('模型测试结果');summ=json.loads((ROOT/'results/vision_summary.json').read_text());st.dataframe(pd.DataFrame([r for r in summ if r['split']=='test'and r['condition']=='all']),use_container_width=True);st.json(json.loads((ROOT/'results/system_checks.json').read_text()))
+  st.subheader('模型测试结果');summ=json.loads((ROOT/'results/vision_summary.json').read_text());st.dataframe(pd.DataFrame([r for r in summ if r['split']=='test'and r['condition']=='all']),width='stretch');st.json(json.loads((ROOT/'results/system_checks.json').read_text()))
   st.markdown('**技术参考**:本项目参考 psesaank/FaceRecognitionAttendance 仓库设计思路。匿名检测使用 OpenCV Haar Cascade 模型(保留 Intel 原始许可);演示图片来自 NASA 公开数据集,由 scikit-image 提供。')
 c.close()
