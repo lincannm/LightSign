@@ -14,7 +14,7 @@ LightSign 是参考 psesaank/FaceRecognitionAttendance 业务场景的独立重�
 
 ## 快速开始
 
-本项目需要 Python 3.14 环境。模型和示例数据已经打包在项目中，无需额外下载或训练。
+本项目需要 Python 3.12 环境。模型和示例数据已经打包在项目中，无需额外下载或训练。
 
 ### 安装步骤
 
