@@ -10,3 +10,5 @@ AGENTS.md
 certs/*.pem
 certs/*.key
 certs/*.crt
+
+.claude/
