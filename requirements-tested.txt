@@ -1,7 +1,0 @@
-# Direct dependencies actually tested on Python3.12; platform wheels may differ.
-streamlit==1.65.0
-opencv-python-headless==4.10.0.84
-numpy==1.26.4
-Pillow==12.3.0
-pandas==3.0.6
-qrcode==8.2

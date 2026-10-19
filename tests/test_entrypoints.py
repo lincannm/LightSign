@@ -61,11 +61,44 @@ class LauncherTests(unittest.TestCase):
             config_dir = Path(directory) / ".streamlit"
             config_dir.mkdir()
             (config_dir / "config.toml").write_text('[server]\nsslCertFile="cert.pem"\nsslKeyFile="key.pem"\n', encoding="utf-8")
-            self.assertIsNone(run.certificate_files())
-            for file in ["cert.pem", "key.pem"]:
-                (Path(directory) / file).touch()
-            self.assertEqual(run.certificate_files(), (Path(directory) / "cert.pem", Path(directory) / "key.pem"))
+            paths = run.certificate_files(hosts=["192.168.1.42"])
+            self.assertEqual(paths, (Path(directory) / "cert.pem", Path(directory) / "key.pem"))
+            original = [path.read_bytes() for path in paths]
+            self.assertEqual(run.certificate_files(hosts=["192.168.1.42"]), paths)
+            self.assertEqual([path.read_bytes() for path in paths], original)
             self.assertIsNone(run.certificate_files(http=True))
+
+    def test_http_does_not_create_certificate_files(self):
+        with tempfile.TemporaryDirectory() as directory, patch.object(run, "ROOT", Path(directory)):
+            self.assertIsNone(run.certificate_files(http=True))
+            self.assertEqual(list(Path(directory).iterdir()), [])
+
+    def test_certificate_failure_does_not_start_or_fall_back_to_http(self):
+        with patch.object(run, "participant_base_url", return_value="https://192.168.1.42:8504/"), \
+             patch.object(run.socket, "socket"), \
+             patch.object(run, "certificate_files", side_effect=OSError("证书写入失败")), \
+             patch.object(run.subprocess, "Popen") as popen, \
+             contextlib.redirect_stderr(io.StringIO()) as errors:
+            self.assertEqual(run.main([]), 1)
+            popen.assert_not_called()
+            self.assertIn("证书写入失败", errors.getvalue())
+
+    def test_launcher_covers_and_pins_the_shared_address(self):
+        first, second = Mock(), Mock()
+        first.poll.return_value = 1
+        second.poll.return_value = 1
+        first.returncode = second.returncode = 1
+        with patch.object(run, "participant_base_url", return_value="https://192.168.1.42:8504/"), \
+             patch.object(run.socket, "socket"), \
+             patch.object(run, "certificate_files", return_value=(Path("cert"), Path("key"))) as certificates, \
+             patch.object(run.store, "connect"), patch.object(run.store, "key"), \
+             patch.object(run.subprocess, "Popen", side_effect=[first, second]) as popen, \
+             contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+            self.assertEqual(run.main([]), 1)
+            self.assertIn("192.168.1.42", certificates.call_args.args[1])
+            for call in popen.call_args_list:
+                self.assertEqual(call.kwargs["env"]["LIGHTSIGN_PARTICIPANT_URL"], "https://192.168.1.42:8504/")
+                self.assertEqual(call.kwargs["env"]["LIGHTSIGN_PARTICIPANT_SCHEME"], "https")
 
     def test_rejects_same_port_before_starting(self):
         with patch.object(run.subprocess, "Popen") as popen, contextlib.redirect_stderr(io.StringIO()):

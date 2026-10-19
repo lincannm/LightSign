@@ -1,0 +1,39 @@
+[project]
+name = "lightsign"
+version = "0.1.0"
+description = "轻签活动签到与匿名人数核验系统"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "streamlit==1.66.0",
+    "opencv-python-headless==4.10.0.84",
+    "numpy==1.26.4",
+    "Pillow==12.3.0",
+    "pandas==3.0.6",
+    "qrcode[pil]==8.2",
+    "cryptography==46.0.7",
+]
+
+[project.optional-dependencies]
+experiments = [
+    "scikit-image==0.24.0",
+    "matplotlib==3.11.2",
+]
+
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["light_sign*"]
+
+[tool.setuptools.package-data]
+light_sign = ["*.js"]
+
+[tool.uv]
+package = false
+
+[[tool.uv.index]]
+name = "pypi"
+url = "https://pypi.org/simple"
+default = true

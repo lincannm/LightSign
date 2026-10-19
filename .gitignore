@@ -12,3 +12,7 @@ certs/*.key
 certs/*.crt
 
 .claude/
+
+# pip 构建产物
+build/
+*.egg-info/

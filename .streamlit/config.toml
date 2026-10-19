@@ -1,5 +1,5 @@
 [server]
-# 启用 HTTPS
+# run.py 自动生成或更新这两个文件，然后启用 HTTPS
 sslCertFile = "certs/cert.pem"
 sslKeyFile = "certs/key.pem"
 

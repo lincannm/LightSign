@@ -1,104 +1,38 @@
 #!/usr/bin/env python3
-"""生成自签名 SSL 证书用于 HTTPS 访问
+"""手动检查或更新 HTTPS 自签名证书，无需安装 OpenSSL 命令行工具。"""
 
-使用方法:
-    python generate_cert.py
-"""
-import subprocess
-import sys
+import argparse
 from pathlib import Path
+import sys
+from urllib.parse import urlsplit
+
+from light_sign.certificates import certificate_paths, ensure_certificate
+from light_sign.network import participant_base_url
+
+ROOT = Path(__file__).resolve().parent
 
 
-def main():
-    """生成自签名证书"""
-    certs_dir = Path(__file__).parent / "certs"
-    certs_dir.mkdir(exist_ok=True)
-
-    cert_file = certs_dir / "cert.pem"
-    key_file = certs_dir / "key.pem"
-    config_file = certs_dir / "openssl.cnf"
-
-    # 检查是否已存在证书
-    if cert_file.exists() and key_file.exists():
-        response = input("证书已存在,是否重新生成? (y/N): ").strip().lower()
-        if response != 'y':
-            print("已取消")
-            return
-
-    print("正在生成自签名 SSL 证书...")
-
-    # 检查 OpenSSL 是否可用
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--host", action="append", default=[], help="额外的访问 IP 或域名，可重复指定")
+    parser.add_argument("--force", action="store_true", help="强制重新生成证书和私钥")
+    args = parser.parse_args(argv)
+    hosts = list(args.host)
     try:
-        result = subprocess.run(
-            ["openssl", "version"],
-            capture_output=True,
-            text=True,
-            check=True
-        )
-        print(f"✓ 检测到 {result.stdout.strip()}")
-    except (subprocess.CalledProcessError, FileNotFoundError):
-        print("错误: 未找到 OpenSSL,请先安装", file=sys.stderr)
-        sys.exit(1)
-
-    # 如果配置文件不存在,创建它
-    if not config_file.exists():
-        config_content = """[req]
-default_bits = 4096
-prompt = no
-default_md = sha256
-distinguished_name = dn
-x509_extensions = v3_ca
-
-[dn]
-C=CN
-ST=Local
-L=Local
-O=LightSign
-OU=Development
-CN=localhost
-
-[v3_ca]
-subjectAltName = @alt_names
-basicConstraints = CA:FALSE
-keyUsage = digitalSignature, keyEncipherment
-extendedKeyUsage = serverAuth
-
-[alt_names]
-DNS.1 = localhost
-DNS.2 = 127.0.0.1
-IP.1 = 127.0.0.1
-IP.2 = 0.0.0.0
-"""
-        config_file.write_text(config_content, encoding='utf-8')
-        print(f"✓ 已创建配置文件: {config_file}")
-
-    # 生成证书
-    cmd = [
-        "openssl", "req", "-x509",
-        "-newkey", "rsa:4096",
-        "-keyout", str(key_file),
-        "-out", str(cert_file),
-        "-days", "365",
-        "-nodes",
-        "-config", str(config_file)
-    ]
-
+        hosts.append(urlsplit(participant_base_url()).hostname)
+    except ValueError as error:
+        print(f"{error} 仍可生成本机访问证书。", file=sys.stderr)
     try:
-        subprocess.run(cmd, check=True, capture_output=True)
-        print(f"✓ 证书生成成功")
-        print(f"  证书文件: {cert_file}")
-        print(f"  私钥文件: {key_file}")
-        print()
-        print("证书有效期: 365 天")
-        print()
-        print("下次启动应用时将自动使用 HTTPS")
-        print("访问地址: https://localhost:8503")
-    except subprocess.CalledProcessError as e:
-        print(f"错误: 证书生成失败", file=sys.stderr)
-        if e.stderr:
-            print(e.stderr.decode('utf-8', errors='ignore'), file=sys.stderr)
-        sys.exit(1)
+        cert, key = certificate_paths(ROOT)
+        changed = ensure_certificate(cert, key, hosts, force=args.force)
+        print("已生成或更新证书。" if changed else "现有证书有效，无需更新。")
+        print(f"证书文件：{cert}\n私钥文件：{key}")
+        print("服务启动后使用 HTTPS；已运行的服务需要重启。浏览器保留默认的自签名证书警告。")
+        return 0
+    except (OSError, ValueError) as error:
+        print(f"证书生成失败：{error}", file=sys.stderr)
+        return 1
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

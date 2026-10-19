@@ -14,25 +14,44 @@ LightSign 是参考 psesaank/FaceRecognitionAttendance 业务场景的独立重�
 
 ## 快速开始
 
-本项目需要 Python 3.12 环境。模型和示例数据已经打包在项目中，无需额外下载或训练。
+以下命令均在 Windows PowerShell 中执行。模型和示例数据已经打包在项目中，无需额外下载或训练。
 
-### 安装步骤
+### 安装 uv（仅需一次）
 
-首先创建并激活虚拟环境，然后安装依赖：
+项目使用 [uv](https://docs.astral.sh/uv/) 管理 Python 3.12 和依赖，无需预先安装 Python，也无需手动创建或激活虚拟环境。使用 Windows 包管理器安装 uv：
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate  # Windows 用户请使用 .venv\Scripts\activate
-python -m pip install -r requirements.txt
+```powershell
+winget install --id astral-sh.uv --exact
 ```
 
-### 启动应用
+安装完成后重新打开 PowerShell。如果系统没有 WinGet，可以按 [uv 官方安装说明](https://docs.astral.sh/uv/getting-started/installation/) 安装。
 
-在虚拟环境下执行：
+### 一条命令准备环境并启动
 
-```bash
-python run.py
+下载并解压源码，在项目根目录（`run.py` 所在目录）打开 PowerShell，执行：
+
+```powershell
+uv run --locked python .\run.py
 ```
+
+首次运行会在需要时自动下载 Python 3.12、创建 `.venv`，并按 `uv.lock` 安装依赖，因此需要联网。后续启动仍执行同一条命令，uv 会复用已准备好的环境。请勿复制其他电脑的 `.venv`；每台电脑由 uv 在本地创建环境。
+
+### 使用原生 Python/pip 部署（不安装 uv）
+
+先安装 Python 3.12，并在项目根目录打开 PowerShell。使用 Windows Python 启动器创建虚拟环境，直接调用环境内的 Python，无需激活脚本：
+
+```powershell
+py -3.12 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install --upgrade pip
+.\.venv\Scripts\python.exe -m pip install -e .
+.\.venv\Scripts\python.exe .\run.py
+```
+
+如果没有 `py` 命令，可在确认 `python --version` 为 3.12 后，用 `python -m venv .venv` 创建环境。后续只需执行最后一条启动命令。pip 同样读取 `pyproject.toml`，无需 requirements 文件；它不会读取 `uv.lock`，直接依赖版本按项目声明安装，间接依赖由 pip 解析。需要完整锁定环境时使用 uv。
+
+两种方式任选其一；下文主要展示 uv 命令。使用 pip 环境时，将 `uv run --locked python` 替换为 `.\.venv\Scripts\python.exe`，即可执行相同脚本和启动参数。
+
+### 访问应用
 
 启动脚本会同时运行两个独立入口，共用本机数据库和签名密钥：
 
@@ -41,30 +60,52 @@ python run.py
 | 组织者 | `https://localhost:8503/` | 创建活动、生成或撤销二维码、关闭活动、匿名计数、导出记录；默认仅本机可访问 |
 | 参与者 | `https://<本机局域网IP>:8504/` | 自愿签到；默认允许局域网访问，不包含活动管理或记录导出 |
 
+首次启动会自动生成本机 HTTPS 自签名证书，无需安装 OpenSSL、手动填写 IP 或提前运行证书生成脚本。服务启动后，在浏览器打开终端显示的组织者入口；浏览器会保留默认的证书警告页面。
+
 系统自动识别本机局域网地址，生成包含活动签到链接的二维码，无需填写 IP 或入口地址。Windows 下优先选择带默认网关的物理 Wi-Fi 或以太网网卡，避开回环、自动分配地址和常见代理测试地址。组织者页面只展示二维码及下载按钮；手机连接同一 Wi-Fi 后，用系统相机扫码即可打开对应活动。两个入口使用独立脚本，不能通过修改 URL 参数切换到组织者功能。按 `Ctrl+C` 同时停止两个服务；若任一服务启动失败或退出，启动脚本会回收另一个服务。
 
 可以调整端口（两端必须使用不同端口），二维码会自动使用参与者服务的协议和端口：
 
-```bash
-python run.py --organizer-port 8503 --participant-port 8504
+```powershell
+uv run --locked python .\run.py --organizer-port 8503 --participant-port 8504
 ```
 
-没有可用局域网时，生成二维码会提示连接 Wi-Fi 或网线，不会使用回环地址生成手机无法访问的二维码。切换网络后重新生成即可。特殊部署仍可通过命令行 `--participant-url` 指定入口，无需在网页配置。
+没有可用局域网时，生成二维码会提示连接 Wi-Fi 或网线，不会使用回环地址生成手机无法访问的二维码。切换网络后重启应用再生成二维码即可。特殊部署仍可通过命令行 `--participant-url` 指定入口，无需在网页配置。
 
 #### HTTPS 支持
 
-项目默认启用 HTTPS 以支持手机端摄像头扫码功能（浏览器安全策略要求 HTTPS 才能访问摄像头）。
+**为什么需要证书？** HTTPS 使用 TLS 加密浏览器与本机服务之间的通信，服务端需要证书和配套私钥来完成握手。证书包含服务端公钥和适用的域名或 IP，私钥由服务端保管。浏览器还会检查证书的签发者是否受信任、地址是否匹配、证书是否有效。
 
-⚠️ **首次访问时浏览器会显示证书警告（如 `NET::ERR_CERT_AUTHORITY_INVALID`），这是正常的！** 证书是自签名的，数据传输仍然加密安全。
+手机网页内调用摄像头通常要求受信任的 HTTPS 安全上下文；电脑访问 `localhost` 有安全上下文例外。手机用系统相机扫描活动二维码、再打开签到网页，并不需要网页本身调用摄像头，因此 HTTP 也可以完成这一签到流程。不过，HTTP 不提供传输加密。
 
-**接受证书方法**:
-- Chrome/Edge: 点击「高级」→「继续访问 localhost」，或在错误页面直接输入 `thisisunsafe`
-- Firefox: 点击「高级」→「接受风险并继续」
-- Safari: 点击「显示详细信息」→「访问此网站」
+**第一次启动何时生成证书？** `run.py` 先识别参与者访问地址并检查两个端口，再调用 Python 的 `cryptography` 库生成证书，最后启动两个 HTTPS 服务。证书包含 `localhost`、`127.0.0.1`、`::1` 和本次使用的局域网 IP 或指定域名；`0.0.0.0` 只是监听地址，不会作为通配 IP 写入证书。即使暂时没有局域网，也可生成本机证书并打开组织者入口；连接网络后重启应用即可加入手机访问地址。
 
-**手机访问**：手机连接同一 Wi-Fi，扫描自动生成的活动二维码，接受证书警告后即可签到或使用摄像头扫码。组织者在电脑访问 8503 端口。参与者地址自动获取，并在启动终端输出；防火墙需允许参与者端口，局域网的设备隔离设置也可能影响互访。
+**证书如何生成和复用？** 程序在本机生成 3072 位 RSA 私钥，并使用 SHA-256 签发有效期为 365 天的自签名 X.509 服务端证书。默认保存到 `certs\key.pem` 和 `certs\cert.pem`，也可由 `.streamlit\config.toml` 配置文件路径。两个入口共用同一对文件。后续启动会检查地址、有效期和私钥配对：证书有效且覆盖访问地址时复用；缺失、损坏、距离过期不足 30 天或地址不匹配时重新生成。重新生成的私钥不设密码，便于服务自动启动。原有 OpenSSL 配置文件已移除。
 
-如需使用 HTTP，执行 `python run.py --http`；证书文件缺失时也会退回 HTTP。局域网手机摄像头需要 HTTPS，HTTP 模式仍可通过活动链接、手动输入或上传图片签到。证书过期可运行 `python generate_cert.py` 重新生成。
+本次运行的二维码分享地址固定为启动时识别的地址；切换 Wi-Fi 或电脑 IP 变化后，请重启应用，使证书和二维码一起更新。正常启动无需手动生成；如需提前检查证书、加入额外地址或强制重新生成，可执行：
+
+```powershell
+uv run --locked python .\generate_cert.py
+uv run --locked python .\generate_cert.py --host 192.168.1.10 --force
+```
+
+使用 pip 环境时，对应命令为：
+
+```powershell
+.\.venv\Scripts\python.exe .\generate_cert.py --host 192.168.1.10 --force
+```
+
+如果服务已在运行，需要停止并重新启动才能加载新证书。证书生成失败时会报告错误并停止启动，不会静默降级为 HTTP。
+
+**浏览器信任与摄像头。** 本项目不要求签到者安装或信任本地 CA，不修改系统或手机的证书信任，也不绕过、隐藏浏览器的证书警告。自签名证书没有公共受信任机构背书，浏览器会按自身规则显示证书警告，是否提供继续访问选项也由浏览器决定。HTTPS 已启用并不保证所有手机浏览器允许网页调用摄像头：部分浏览器即使允许继续访问，也可能因证书不受信任而限制摄像头，用户还需授予摄像头权限。遇到这种情况，可用手机系统相机扫描活动链接后签到，或使用上传二维码图片等现有入口；不需安装证书。
+
+证书和私钥已由 `.gitignore` 排除，尤其不要分享私钥。这组 TLS 私钥与 `runtime\signing.key` 中用于二维码签名的密钥用途不同。
+
+**手机访问**：手机连接同一 Wi-Fi，扫描自动生成的活动二维码。参与者地址会在启动终端输出；防火墙需允许参与者端口，局域网的设备隔离设置也可能影响互访。如需在已有证书时仍使用 HTTP，执行：
+
+```powershell
+uv run --locked python .\run.py --http
+```
 
 ### 使用流程
 
@@ -84,15 +125,19 @@ python run.py --organizer-port 8503 --participant-port 8504
 
 我们提供了完整的实验脚本，方便验证系统性能：
 
-```bash
-python scripts/check.py      # 系统功能检查
-python scripts/evaluate.py   # 性能评估
-python scripts/stress.py     # 压力测试
+```powershell
+uv run --locked python .\scripts\check.py      # 系统功能检查
+uv run --locked python .\scripts\evaluate.py   # 性能评估
+uv run --locked python .\scripts\stress.py     # 压力测试
 ```
 
 ### 关于模型和数据
 
-项目使用的是 OpenCV 预训练的 Haar 级联检测器，不需要额外训练。如果你想重新生成实验数据，可以先安装 scikit-image（`pip install scikit-image`），然后运行 `python scripts/make_data.py`。不过项目已经包含了所有必需的 PNG 图像和清单文件。
+项目使用的是 OpenCV 预训练的 Haar 级联检测器，不需要额外训练。项目已经包含所有必需的 PNG 图像和清单文件。如果需要重新生成实验数据，使用同一份依赖声明中的 `experiments` 分组，uv 会自动安装额外依赖：
+
+```powershell
+uv run --locked --extra experiments python .\scripts\make_data.py
+```
 
 需要注意的是，evaluate 脚本会在 development 集上调参并在固定的 test 集上评估；而 stress 脚本则是在参数选定后进行挑战性测试，其结果不应用于调参（这样才能保证验证的独立性）。
 
@@ -111,11 +156,11 @@ python scripts/stress.py     # 压力测试
 
 如果你想验证并发竞态条件的反例，可以先获取原仓库，然后运行：
 
-```bash
-python scripts/upstream_race.py --upstream-src /path/to/original/repo/src
+```powershell
+uv run --locked python .\scripts\upstream_race.py --upstream-src "C:\Projects\FaceRecognitionAttendance\src"
 ```
 
-该脚本仅导入数据库模块进行测试，不包含上游源代码。
+请将示例路径替换为本机原仓库的 `src` 目录。该脚本仅导入数据库模块进行测试，不包含上游源代码。
 
 ## 数据与隐私保护
 
@@ -156,24 +201,41 @@ python scripts/upstream_race.py --upstream-src /path/to/original/repo/src
 
 ### 依赖管理
 
-如果你想精确复现某次运行的环境，可以使用锁定版本的依赖文件：
+所有直接依赖统一在 `pyproject.toml` 中维护，`uv.lock` 记录解析后的完整依赖版本，`.python-version` 指定 Python 3.12。原有的多份 requirements 文件已合并移除；运行依赖和可选的实验依赖（`experiments` extra）均在同一文件中声明，uv 和 pip 共用这一份配置。
 
-```bash
-pip install -r requirements-tested.txt
+通常直接使用前面的启动命令即可。如果只想准备环境而暂不启动：
+
+```powershell
+uv sync --locked
 ```
 
-如果需要运行数据生成和绘图相关的实验，请安装额外依赖：
+准备包含数据生成和绘图工具的环境：
 
-```bash
-pip install -r requirements-experiments.txt
+```powershell
+uv sync --locked --extra experiments
 ```
+
+pip 用户在已有虚拟环境内安装实验依赖：
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -e ".[experiments]"
+```
+
+然后直接运行数据生成或绘图脚本，例如：
+
+```powershell
+.\.venv\Scripts\python.exe .\scripts\make_data.py
+.\.venv\Scripts\python.exe .\scripts\plot_results.py --font "C:\Windows\Fonts\msyh.ttc"
+```
+
+`--locked` 会检查依赖声明与锁文件是否一致，不一致时直接报错。维护者修改 `pyproject.toml` 后，应执行 `uv lock`，验证后将配置与锁文件一起提交。历史实验环境记录仍保留在 `audit\environment.txt` 和 `results\setup.json`；锁文件用于复现本次统一后的环境。
 
 ### 图表生成
 
 重新生成实验结果图表：
 
-```bash
-python scripts/plot_results.py --font /path/to/your/chinese/font.ttf
+```powershell
+uv run --locked --extra experiments python .\scripts\plot_results.py --font "C:\Windows\Fonts\msyh.ttc"
 ```
 
-生成的图表将保存在 `results/figures` 目录。如果不指定中文字体路径，可能会出现字符显示不全的情况，建议指定本机已授权的中文字体文件。
+生成的图表将保存在 `results\figures` 目录。示例使用 Windows 微软雅黑，请按本机已安装且已授权的中文字体调整路径。如果不指定中文字体路径，可能会出现字符显示不全的情况。

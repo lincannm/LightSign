@@ -8,7 +8,7 @@ import socket
 import subprocess
 import sys
 import time
-import tomllib
+from urllib.parse import urlsplit
 
 from light_sign import store
 from light_sign.network import participant_base_url
@@ -23,15 +23,14 @@ def port_number(value):
     return port
 
 
-def certificate_files(http=False):
-    config_file = ROOT / ".streamlit/config.toml"
-    config = tomllib.loads(config_file.read_text(encoding="utf-8")) if config_file.exists() else {}
-    server = config.get("server", {})
-    cert, key = server.get("sslCertFile"), server.get("sslKeyFile")
-    if http or not cert or not key:
+def certificate_files(http=False, hosts=()):
+    if http:
         return None
-    cert, key = ROOT / cert, ROOT / key
-    return (cert, key) if cert.is_file() and key.is_file() else None
+    from light_sign.certificates import certificate_paths, ensure_certificate
+    cert, key = certificate_paths(ROOT)
+    if ensure_certificate(cert, key, hosts):
+        print("已生成或更新本机 HTTPS 自签名证书。", flush=True)
+    return cert, key
 
 
 def server_command(app, host, port, certificates):
@@ -39,7 +38,7 @@ def server_command(app, host, port, certificates):
         sys.executable, "-m", "streamlit", "run", str(ROOT / app),
         "--server.address", host, "--server.port", str(port),
         "--server.headless", "true",
-        # 无证书时显式覆盖配置中的旧路径，允许退回 HTTP。
+        # --http 显式覆盖配置中的证书路径。
         "--server.sslCertFile", str(certificates[0]) if certificates else "",
         "--server.sslKeyFile", str(certificates[1]) if certificates else "",
     ]
@@ -69,8 +68,7 @@ def main(argv=None):
     if args.organizer_port == args.participant_port:
         parser.error("组织者和参与者必须使用不同端口")
 
-    certificates = certificate_files(args.http)
-    scheme = "https" if certificates else "http"
+    scheme = "http" if args.http else "https"
     env = os.environ.copy()
     env["LIGHTSIGN_PARTICIPANT_PORT"] = str(args.participant_port)
     env["LIGHTSIGN_PARTICIPANT_HOST"] = args.participant_host
@@ -91,6 +89,9 @@ def main(argv=None):
     except ValueError as error:
         participant_url = None
         print(str(error), file=sys.stderr)
+    if participant_url:
+        # 本次运行固定分享地址，使二维码与启动时生成的证书地址一致。
+        env["LIGHTSIGN_PARTICIPANT_URL"] = participant_url
 
     processes = []
     try:
@@ -99,6 +100,10 @@ def main(argv=None):
                            (args.participant_host, args.participant_port)]:
             with socket.socket() as probe:
                 probe.bind((host, port))
+        hosts = [args.organizer_host, args.participant_host]
+        if participant_url:
+            hosts.append(urlsplit(participant_url).hostname)
+        certificates = certificate_files(args.http, hosts)
         connection = store.connect()
         connection.close()
         store.key()
@@ -108,7 +113,7 @@ def main(argv=None):
             print(f"参与者入口：{participant_url}", flush=True)
         print("手机连接同一 Wi-Fi 后，扫描组织者页面的活动二维码签到。按 Ctrl+C 同时停止两个服务。", flush=True)
         if certificates:
-            print("已启用 HTTPS；首次访问两个端口时需接受本机自签名证书。", flush=True)
+            print("已启用 HTTPS；浏览器会按默认规则显示自签名证书警告，系统不会安装信任或绕过检查。", flush=True)
         else:
             print("使用 HTTP；局域网手机可使用活动链接或上传二维码图片签到。", flush=True)
         for app, host, port in [("app.py", args.organizer_host, args.organizer_port),
@@ -123,7 +128,7 @@ def main(argv=None):
     except KeyboardInterrupt:
         print("\n正在停止两个入口…")
         return 0
-    except (OSError, ValueError) as error:
+    except (OSError, ValueError, ImportError) as error:
         print(f"启动失败：{error}", file=sys.stderr)
         return 1
     finally:
