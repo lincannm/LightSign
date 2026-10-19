@@ -3,12 +3,13 @@
 sslCertFile = "certs/cert.pem"
 sslKeyFile = "certs/key.pem"
 
-# 端口配置
+# 组织者入口端口；run.py 会另启 8504 端口的参与者入口
 port = 8503
+address = "127.0.0.1"
 
-# 允许外部访问(用于手机连接)
+# 参与者服务的局域网监听地址由 run.py 单独配置
 headless = true
-enableCORS = false
+enableCORS = true
 enableXsrfProtection = true
 
 [browser]

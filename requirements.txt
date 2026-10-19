@@ -1,4 +1,4 @@
-streamlit>=1.49,<2
+streamlit>=1.51,<2
 opencv-python-headless>=4.10,<4.12
 # numpy 自 2.3 起才提供官方 cp314 轮子；Python 3.10-3.12 的实测版本见 requirements-tested.txt
 numpy>=2.3,<3
