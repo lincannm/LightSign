@@ -1,7 +1,7 @@
 [project]
 name = "lightsign"
 version = "0.1.0"
-description = "轻签活动签到与匿名人数核验系统"
+description = "轻签活动签到与匿名人数清点系统"
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 dependencies = [

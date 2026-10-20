@@ -1,21 +1,18 @@
-import io,json,os
-from urllib.parse import urlsplit
+import json
 import streamlit as st
 import pandas as pd
-import qrcode
 from PIL import Image,UnidentifiedImageError
 from light_sign import store
-from light_sign.links import participant_link
-from light_sign.network import participant_base_url
+from light_sign.organizer_qr import clear_qr,issue_qr,show_qr
 from light_sign.vision import Counter,ROOT
 
 st.set_page_config(page_title='轻签 · 组织者管理',page_icon='🔷',layout='wide')
 st.title('轻签 · 组织者管理')
-st.caption('活动与二维码 / 匿名人数核验 / 签到记录导出')
-st.info('用于自愿活动签到。视觉计数只输出匿名人脸框数量，不识别身份、不关联签到记录。演示图片和参与代号均为合成样例。')
+st.caption('活动与二维码 / 人数清点 / 签到记录导出')
+st.info('用于自愿活动签到。视觉清点只输出匿名人脸框数量，不识别身份、不关联签到记录。演示图片和参与代号均为合成样例。')
 @st.cache_resource
 def counter():return Counter()
-c=store.connect();k=store.key();tabs=st.tabs(['活动与二维码','匿名计数','记录与数据'])
+c=store.connect();k=store.key();tabs=st.tabs(['活动与二维码','人数清点','记录与数据'])
 with tabs[0]:
  col1,col2=st.columns(2)
  with col1:
@@ -27,48 +24,40 @@ with tabs[0]:
   if events:
    eid=st.selectbox('选择活动',[r['id']for r in events],format_func=lambda x:next(r['title']+(' · 开放'if r['active']else' · 已关闭')for r in events if r['id']==x))
    ttl=st.slider('二维码有效秒数',10,600,120,10)
+   auto_refresh=st.checkbox('二维码自动刷新',value=True,key='qr_auto_refresh',help='开启后，到期自动生成新的二维码；关闭后，到期显示黑色过期提示。')
    if st.button('生成限时二维码',type='primary'):
-    st.session_state.pop('token',None);st.session_state.pop('participant_link',None)
+    clear_qr()
     try:
-     participant_url=participant_base_url(
-      scheme=os.environ.get('LIGHTSIGN_PARTICIPANT_SCHEME',urlsplit(st.context.url).scheme or 'https'),
-      port=int(os.environ.get('LIGHTSIGN_PARTICIPANT_PORT','8504')),
-      host=os.environ.get('LIGHTSIGN_PARTICIPANT_HOST','0.0.0.0'),
-      override=os.environ.get('LIGHTSIGN_PARTICIPANT_URL'))
-     token=store.issue(c,k,eid,ttl)
-     st.session_state.token=token;st.session_state.token_event=eid
-     st.session_state.participant_link=participant_link(participant_url,token)
+     issue_qr(c,k,eid,ttl)
     except ValueError as ex:st.error(str(ex))
    a,b=st.columns(2)
    if a.button('撤销该活动二维码'):
-    store.revoke(c,eid);st.session_state.pop('token',None);st.success('已撤销,原二维码将失效')
+    store.revoke(c,eid);clear_qr();st.success('已撤销,原二维码将失效')
    if b.button('关闭活动'):
-    store.close(c,eid);st.session_state.pop('token',None);st.rerun()
+    store.close(c,eid);clear_qr();c.close();st.rerun()
  with col2:
-  if events and st.session_state.get('token') and st.session_state.get('token_event')==eid and st.session_state.get('participant_link'):
-   qr=qrcode.make(st.session_state.participant_link).convert('RGB');st.image(qr,width=330);buf=io.BytesIO();qr.save(buf,format='PNG');st.download_button('下载二维码 PNG',buf.getvalue(),'activity_qr.png','image/png')
-   st.caption('手机连接同一 Wi-Fi，使用系统相机扫码即可签到。')
+  if events:show_qr(eid,ttl,auto_refresh)
 with tabs[1]:
- st.subheader('匿名人数计数')
+ st.subheader('匿名人数清点')
  source=st.radio('图像来源',['内置样例','上传图片','摄像头拍摄'],horizontal=True)
  im=None
  try:
   if source=='内置样例':
    p=st.selectbox('选择场景',list((ROOT/'samples').glob('*.png')),format_func=lambda p:p.stem);im=Image.open(p)
   elif source=='上传图片':
-   f=st.file_uploader('上传图片用于人数统计',type=['png','jpg','jpeg'],key='faces')
+   f=st.file_uploader('上传图片用于人数清点',type=['png','jpg','jpeg'],key='faces')
    if f:im=Image.open(f)
   else:
    f=st.camera_input('拍摄照片,不会保存原图')
    if f:im=Image.open(f)
   mode=json.loads((ROOT/'models/policy.json').read_text())['mode']
-  if st.button('开始计数',type='primary')and im is not None:
+  if st.button('开始清点',type='primary')and im is not None:
    result,safe=counter().run(im,mode);st.session_state.counter_result=result;st.session_state.counter_image=safe
   if st.session_state.get('counter_result'):
    r=st.session_state.counter_result;a,b=st.columns(2)
    with a:st.image(st.session_state.counter_image,caption='匿名检测结果,框为自动识别,不代表真实人数')
    with b:st.metric('检测到的人脸框数',r['count']);st.metric('处理耗时',f"{r['elapsed_ms']:.1f} ms");st.json(r);st.download_button('下载结果 JSON',json.dumps(r,ensure_ascii=False,indent=2),'anonymous_count.json')
-  st.caption('模型可能漏检、误检或重复计数。检测框数不等于实际人数;照片或屏幕中的人脸也可能被计入。')
+  st.caption('模型可能漏检、误检或重复清点。检测框数不等于实际人数;照片或屏幕中的人脸也可能被计入。')
  except (UnidentifiedImageError,ValueError,OSError):st.error('图片无法读取,请换个文件试试')
 with tabs[2]:
  st.subheader('签到记录')
