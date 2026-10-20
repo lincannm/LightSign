@@ -16,3 +16,6 @@ certs/*.crt
 # pip 构建产物
 build/
 *.egg-info/
+
+# 一键打包生成的分享压缩包
+/dist/

@@ -26,7 +26,7 @@ echo [1/3] 检查项目文件和 uv 环境管理工具...
 for %%F in (run.py app.py participant.py pyproject.toml uv.lock light_sign\store.py models\policy.json models\haarcascade_frontalface_default.xml results\vision_summary.json results\system_checks.json) do (
     if not exist "%%F" (
         echo [错误] 缺少文件：%%F
-        echo 请先完整解压或下载项目，再双击 start.bat。
+        echo 请先完整解压或下载项目，再双击 START.BAT。
         goto failed
     )
 )
@@ -64,7 +64,7 @@ rem Use the environment's interpreter directly; run.py owns child-process cleanu
 set "EXIT_CODE=%ERRORLEVEL%"
 if not "%EXIT_CODE%"=="0" goto run_error
 echo.
-echo 服务已停止。下次使用时再次双击 start.bat 即可。
+echo 服务已停止。下次使用时再次双击 START.BAT 即可。
 goto finish
 
 :find_uv
@@ -81,12 +81,12 @@ if errorlevel 1 set "UV_EXE="
 exit /b 0
 
 :usage
-echo 使用方法：双击 start.bat，或在命令行执行 start.bat [启动参数]
+echo 使用方法：双击 START.BAT，或在命令行执行 START.BAT [启动参数]
 echo.
 echo 常用示例：
-echo   start.bat                                 默认 HTTPS 双端启动
-echo   start.bat --http                          使用 HTTP 模式
-echo   start.bat --organizer-port 9003 --participant-port 9004
+echo   START.BAT                                 默认 HTTPS 双端启动
+echo   START.BAT --http                          使用 HTTP 模式
+echo   START.BAT --organizer-port 9003 --participant-port 9004
 echo.
 echo 其他参数与 run.py 一致，自定义端口或 HTTP 模式请以实际输出地址为准。
 goto finish
@@ -110,7 +110,7 @@ echo.
 echo [错误] 服务启动失败或异常退出，退出码：%EXIT_CODE%
 echo 请查看上方错误；若端口被占用，请先关闭之前的启动窗口。
 echo 也可以在命令行执行以下命令，改用其他端口：
-echo   start.bat --organizer-port 9003 --participant-port 9004
+echo   START.BAT --organizer-port 9003 --participant-port 9004
 goto finish
 
 :failed
