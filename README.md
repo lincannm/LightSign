@@ -19,10 +19,10 @@ LightSign 是一款面向**校园开放日、社团招新、技术沙龙、展�
 
 本项目在 Windows 下运行，内置所需检测模型与示例文件，无需额外下载模型或训练。新手推荐双击启动脚本，也可以选择手动部署。
 
-### 方式一：双击 START.BAT（新手推荐）
+### 方式一：双击 START.bat（新手推荐）
 
 1. **完整解压项目**：将项目解压到有读写权限的文件夹，不要在压缩包内直接运行。
-2. **双击 `START.BAT`**：首次使用请保持联网。脚本会检查 uv，缺少时自动从官方来源安装到当前用户目录，再自动准备 Python 3.12、创建项目内的 `.venv` 并按 `uv.lock` 安装依赖，无需自行安装 Python 或激活环境。
+2. **双击 `START.bat`**：首次使用请保持联网。脚本会检查 uv，缺少时自动从官方来源安装到当前用户目录，再自动准备 Python 3.12、创建项目内的 `.venv` 并按 `uv.lock` 安装依赖，无需自行安装 Python 或激活环境。
 3. **打开组织者入口**：窗口显示服务入口后，在浏览器中打开 `https://localhost:8503/`。首次访问会有自签名证书提示，核对地址后点击“高级 -> 继续前往”；手机连接同一 Wi-Fi 后即可扫码签到。
 4. **停止与再次启动**：使用期间保持窗口打开；按 `Ctrl + C` 停止服务，如出现“终止批处理操作吗”请选择 `Y`。以后仍然双击同一个脚本即可，已有环境会复用。
 
@@ -33,9 +33,9 @@ LightSign 是一款面向**校园开放日、社团招新、技术沙龙、展�
 需要 HTTP 模式或自定义端口时，在项目目录打开命令行执行：
 
 ```powershell
-.\START.BAT --http
-.\START.BAT --organizer-port 9003 --participant-port 9004
-.\START.BAT --help
+.\START.bat --http
+.\START.bat --organizer-port 9003 --participant-port 9004
+.\START.bat --help
 ```
 
 脚本参数会传给 `run.py`；切换模式或端口后，以启动窗口输出的实际访问地址为准。
@@ -89,7 +89,7 @@ python .\run.py
 
 ## 一键打包分享
 
-在原始 Git 工作目录中双击 **`PACKAGE.BAT`**，即可生成 `dist/LightSign_时间戳.zip`，将该 ZIP 发给对方即可。接收者完整解压后，打开 `LightSign` 文件夹并双击 `START.BAT`，首次启动需要联网。
+在原始 Git 工作目录中双击 **`package.bat`**，即可生成 `dist/LightSign_时间戳.zip`，将该 ZIP 发给对方即可。接收者完整解压后，打开 `LightSign` 文件夹并双击 `START.bat`，首次启动需要联网。
 
 - **打包电脑需要 Git for Windows**，无需先安装 Python 或启动项目；接收者使用启动脚本不需要 Git。
 - 按项目根目录及子目录中当前的 `.gitignore` 规则筛选文件，包含已修改的文件和未提交的新文件；即使某个文件已经被 Git 跟踪，只要现在匹配忽略规则，也不会打包。个人全局 Git 忽略配置不影响打包内容。
@@ -99,8 +99,8 @@ python .\run.py
 也可以指定输出位置，**相对路径以项目根目录为基准**；为防止误覆盖，目标 ZIP 已存在时会提示换名：
 
 ```powershell
-.\PACKAGE.BAT "D:\分享目录\LightSign.zip"
-.\PACKAGE.BAT --help
+.\package.bat "D:\分享目录\LightSign.zip"
+.\package.bat --help
 ```
 
 > 分享前请检查新增文件是否包含敏感信息，必要时先补充 `.gitignore`。不要把新生成的活动记录或私钥移到未被忽略的位置。
@@ -166,8 +166,8 @@ python .\scripts\plot_results.py --font "C:\Windows\Fonts\msyh.ttc"
 
 ```text
 LightSign/
-├── START.BAT            # Windows 新手入口（自动准备 Python、依赖并启动双端）
-├── PACKAGE.BAT          # Windows 一键打包入口（遵循 .gitignore，输出分享 ZIP）
+├── START.bat            # Windows 新手入口（自动准备 Python、依赖并启动双端）
+├── package.bat          # Windows 一键打包入口（遵循 .gitignore，输出分享 ZIP）
 ├── run.py               # 一键启动入口（自动检测网络、准备证书并同时启动双端）
 ├── app.py               # 组织者管理端页面程序
 ├── participant.py       # 参与者签到端页面程序

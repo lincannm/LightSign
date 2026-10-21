@@ -1,3 +1,5 @@
-# Windows batch launchers require CRLF for reliable UTF-8 command parsing.
-*.bat text eol=crlf
-*.BAT text eol=crlf
+# Keep batch launchers as UTF-8 without BOM and CRLF in the repository.
+# CMD can misparse Chinese commands with LF-only line endings.
+# Disable Git newline conversion so ZIP exports retain CRLF too.
+*.bat -text whitespace=cr-at-eol
+*.BAT -text whitespace=cr-at-eol

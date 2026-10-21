@@ -50,7 +50,7 @@ try {
     }
     $gitPath = $git.Source
     if (-not (Test-Path -LiteralPath (Join-Path $root '.git'))) {
-        throw '打包需要原始 Git 工作目录。请在克隆的项目中运行 PACKAGE.BAT；收到 ZIP 的使用者可直接运行 START.BAT。'
+        throw '打包需要原始 Git 工作目录。请在克隆的项目中运行 package.bat；收到 ZIP 的使用者可直接运行 START.bat。'
     }
     $gitRoot = (Invoke-GitText 'rev-parse --show-toplevel').TrimEnd([char[]]@(13, 10))
     if (-not [string]::Equals([System.IO.Path]::GetFullPath($gitRoot), $root, [StringComparison]::OrdinalIgnoreCase)) {
@@ -121,7 +121,7 @@ try {
     Write-Host '[3/3] 打包完成！'
     Write-Host "  文件：$archivePath"
     Write-Host ('  大小：{0:N2} MB；包含 {1} 个文件。' -f $size, $files.Count)
-    Write-Host '将 ZIP 发给对方，完整解压后双击 LightSign 文件夹内的 START.BAT 即可。'
+    Write-Host '将 ZIP 发给对方，完整解压后双击 LightSign 文件夹内的 START.bat 即可。'
     exit 0
 }
 catch {
