@@ -123,14 +123,13 @@ python .\run.py
 ```text
 LightSign/
 ├── START.bat            # Windows 新手入口（自动准备 Python、依赖并启动双端）
-├── package.bat          # Windows 一键打包入口（遵循 .gitignore，输出分享 ZIP）
 ├── run.py               # 一键启动入口（自动检测网络、准备证书并同时启动双端）
 ├── app.py               # 组织者管理端页面程序
 ├── participant.py       # 参与者签到端页面程序
 ├── light_sign/          # 核心业务逻辑模块（签到管理、二维码签发、匿名人数清点等）
 ├── models/              # 内置的开源视觉检测模型文件
 ├── samples/             # 供快速体验和测试的示例图片
-├── scripts/             # 启动、打包与环境维护工具
+├── scripts/             # 启动与环境维护工具
 ├── experiments/         # 自检、评测、回归测试、数据、结果与审计记录
 ├── local_data/          # 本地活动数据与密钥（运行时自动创建，不随交付包提供）
 └── THIRD_PARTY.md       # 第三方开源组件与许可证清单

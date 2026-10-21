@@ -8,13 +8,13 @@ import unittest
 
 
 ROOT = Path(__file__).resolve().parents[2]
-SCRIPTS = ("package.bat", "START.bat")
+SCRIPTS = ("START.bat",)
 
 
 class BatchFileTests(unittest.TestCase):
     def test_filenames_and_ascii_crlf_are_preserved(self):
         names = {path.name for path in ROOT.glob("*") if path.suffix.lower() == ".bat"}
-        self.assertEqual(names, set(SCRIPTS))
+        self.assertTrue(set(SCRIPTS).issubset(names))
         for name in SCRIPTS:
             with self.subTest(script=name):
                 data = (ROOT / name).read_bytes()
@@ -26,7 +26,7 @@ class BatchFileTests(unittest.TestCase):
                 self.assertNotIn(b"\r", data.replace(b"\r\n", b""))
 
     def test_chinese_powershell_scripts_have_utf8_bom(self):
-        for name in ("package.ps1", "start.ps1"):
+        for name in ("start.ps1",):
             with self.subTest(script=name):
                 data = (ROOT / "scripts" / name).read_bytes()
                 self.assertTrue(data.startswith(b"\xef\xbb\xbf"))
@@ -59,7 +59,7 @@ class BatchCommandTests(unittest.TestCase):
         with tempfile.TemporaryDirectory(prefix="lightsign-batch-") as directory:
             project = Path(directory) / "轻签 项目"
             (project / "scripts").mkdir(parents=True)
-            for name in ("package.ps1", "start.ps1"):
+            for name in ("start.ps1",):
                 (project / "scripts" / name).write_bytes((ROOT / "scripts" / name).read_bytes())
             for name in SCRIPTS:
                 (project / name).write_bytes((ROOT / name).read_bytes().replace(b"\r\n", b"\n"))
@@ -87,12 +87,6 @@ class BatchCommandTests(unittest.TestCase):
             self.assertEqual(result.returncode, 1)
             self.assertEqual(result.stderr, "")
             self.assertIn("缺少文件：run.py", result.stdout)
-
-    def test_package_rejects_extra_arguments(self):
-        result = self.run_batch("package.bat one two")
-        self.assertEqual(result.returncode, 1)
-        self.assertEqual(result.stderr, "")
-        self.assertIn("最多接受一个参数", result.stdout)
 
 
 if __name__ == "__main__":

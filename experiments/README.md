@@ -7,7 +7,7 @@
 | 路径 | 内容 |
 |---|---|
 | `scripts/` | 系统自检、视觉评测、数据生成、挑战诊断、绘图和上游竞态审计脚本 |
-| `tests/` | 入口、网络、证书与 Windows 启动、打包脚本的回归检查 |
+| `tests/` | 入口、网络、证书与 Windows 启动脚本的回归检查 |
 | `data/` | 源照片、开发集与固定测试集各 80 张图、标注清单和数据来源说明 |
 | `results/` | 与报告对应的指标、逐图预测、十项自检、二维码往返和原实验环境记录 |
 | `audit/` | 上游来源、许可核查、运行记录和竞态实验记录 |
@@ -58,4 +58,4 @@ python .\experiments\scripts\upstream_race.py --upstream-src "D:\参考仓库副
 
 所有视觉合成图共用同一张源照片，只验证受控条件下的工程流程，不代表跨人群、真实活动的准确率。挑战诊断的失败记录同样保留，不用于反向选参。完整来源与许可说明见 [数据说明](data/README.md) 和根目录 [THIRD_PARTY.md](../THIRD_PARTY.md)。
 
-竞赛成果包建议保留本目录，以便核验报告。`package.bat` 会按 `.gitignore` 打包保留的实验材料；图表和挑战图片需要时可重新生成。应用会尝试展示 `results/vision_summary.json` 和 `results/system_checks.json`，缺少实验记录时显示提示，不阻止业务页面运行。
+竞赛成果包建议保留本目录，以便核验报告。图表和挑战图片需要时可重新生成。应用会尝试展示 `results/vision_summary.json` 和 `results/system_checks.json`，缺少实验记录时显示提示，不阻止业务页面运行。
