@@ -58,8 +58,7 @@ try {
     $requiredFiles = @(
         'run.py', 'app.py', 'participant.py', 'pyproject.toml', 'uv.lock',
         'light_sign\store.py', 'models\policy.json',
-        'models\haarcascade_frontalface_default.xml',
-        'results\vision_summary.json', 'results\system_checks.json'
+        'models\haarcascade_frontalface_default.xml'
     )
     foreach ($name in $requiredFiles) {
         if (-not (Test-Path -LiteralPath (Join-Path $root $name) -PathType Leaf)) {

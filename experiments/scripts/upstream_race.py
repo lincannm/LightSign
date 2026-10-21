@@ -2,7 +2,7 @@
 from pathlib import Path
 import sys,tempfile,threading,concurrent.futures,json
 import argparse
-parser=argparse.ArgumentParser(description='Optional private upstream database audit; no upstream code bundled.');parser.add_argument('--upstream-src',required=True);parser.add_argument('--output',default='audit/upstream_race_rerun.json');args=parser.parse_args()
+parser=argparse.ArgumentParser(description='Optional private upstream database audit; no upstream code bundled.');parser.add_argument('--upstream-src',required=True);parser.add_argument('--output',default=str(Path(__file__).resolve().parents[1]/'audit/upstream_race_rerun.json'));args=parser.parse_args()
 sys.path.insert(0,str(Path(args.upstream_src).resolve()))
 from database import Database
 rows=[]
@@ -17,4 +17,4 @@ for trial in range(5):
    return d.mark_attendance(uid,'2026-10-10','10:00:00')
   with concurrent.futures.ThreadPoolExecutor(max_workers=8)as ex:result=list(ex.map(run,range(8)))
   rows.append({'trial':trial,'requests':8,'accepted':sum(result),'stored_rows':len(db.get_all_attendance()),'method':'barrier after read-before-insert; intentionally aligned race, not production frequency'})
-Path(args.output).write_text(json.dumps(rows,indent=2));print(rows)
+output=Path(args.output);output.parent.mkdir(parents=True,exist_ok=True);output.write_text(json.dumps(rows,indent=2),encoding='utf-8');print(rows)

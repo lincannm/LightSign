@@ -1,4 +1,4 @@
-runtime/
+local_data/
 .venv/
 __pycache__/
 *.pyc
@@ -17,5 +17,9 @@ certs/*.crt
 build/
 *.egg-info/
 
-# 一键打包生成的分享压缩包
 /dist/
+
+# 实验衍生产物：由保留的脚本按需重新生成
+/experiments/data/stress/
+/experiments/results/figures/
+/experiments/results/*.log

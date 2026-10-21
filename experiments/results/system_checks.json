@@ -2,42 +2,42 @@
   {
     "case": "valid",
     "passed": true,
-    "result": "Ç©µ½³É¹¦"
+    "result": "ç­¾åˆ°æˆåŠŸ"
   },
   {
     "case": "duplicate",
     "passed": true,
-    "result": "±¾»î¶¯ÒÑÇ©µ½"
+    "result": "æœ¬æ´»åŠ¨å·²ç­¾åˆ°"
   },
   {
     "case": "no_consent",
     "passed": true,
-    "result": "ÇëÏÈÈ·ÈÏ×ÔÔ¸²Î¼Ó"
+    "result": "è¯·å…ˆç¡®è®¤è‡ªæ„¿å‚åŠ "
   },
   {
     "case": "tampered",
     "passed": true,
-    "result": "Ç©Ãû²»Æ¥Åä"
+    "result": "ç­¾åä¸åŒ¹é…"
   },
   {
     "case": "expired",
     "passed": true,
-    "result": "¶şÎ¬ÂëÒÑ¹ıÆÚ"
+    "result": "äºŒç»´ç å·²è¿‡æœŸ"
   },
   {
     "case": "invalid_code",
     "passed": true,
-    "result": "´úºÅĞëÎª3ÖÁ24Î»×ÖÄ¸Êı×Ö¡¢ºáÏß»òÏÂ»®Ïß"
+    "result": "ä»£å·é¡»ä¸º3è‡³24ä½å­—æ¯æ•°å­—ã€æ¨ªçº¿æˆ–ä¸‹åˆ’çº¿"
   },
   {
     "case": "revoked",
     "passed": true,
-    "result": "¶şÎ¬ÂëÒÑ³·Ïú»ò²»´æÔÚ"
+    "result": "äºŒç»´ç å·²æ’¤é”€æˆ–ä¸å­˜åœ¨"
   },
   {
     "case": "closed",
     "passed": true,
-    "result": "»î¶¯ÒÑ¹Ø±Õ"
+    "result": "æ´»åŠ¨å·²å…³é—­"
   },
   {
     "case": "concurrent_40_same_participant",

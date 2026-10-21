@@ -62,8 +62,13 @@ with tabs[1]:
 with tabs[2]:
  st.subheader('签到记录')
  rr=store.rows(c);st.dataframe(pd.DataFrame(rr),width='stretch');st.download_button('导出 CSV',pd.DataFrame(rr).to_csv(index=False).encode('utf-8-sig'),'checkins.csv','text/csv');st.download_button('导出 JSON',json.dumps(rr,ensure_ascii=False,indent=2),'checkins.json')
- st.caption('时间为UTC时间戳(秒);系统不保存真实姓名、学号、邮箱或人脸数据。代号经过加密处理,但仍可能被关联。请妥善保管runtime目录。')
+ st.caption('时间为UTC时间戳(秒);系统不保存真实姓名、学号、邮箱或人脸数据。代号经过加密处理,但仍可能被关联。请妥善保管 local_data（本地数据）目录。')
  with st.expander('测试数据与技术说明'):
-  st.subheader('模型测试结果');summ=json.loads((ROOT/'results/vision_summary.json').read_text());st.dataframe(pd.DataFrame([r for r in summ if r['split']=='test'and r['condition']=='all']),width='stretch');st.json(json.loads((ROOT/'results/system_checks.json').read_text()))
+  st.subheader('模型测试结果')
+  try:
+   results=ROOT/'experiments/results';summ=json.loads((results/'vision_summary.json').read_text(encoding='utf-8'));checks=json.loads((results/'system_checks.json').read_text(encoding='utf-8'))
+  except (OSError,UnicodeError,json.JSONDecodeError):st.info('当前未附带可读取的实验记录，请参阅技术报告或 experiments/README.md。')
+  else:
+   st.dataframe(pd.DataFrame([r for r in summ if r['split']=='test'and r['condition']=='all']),width='stretch');st.json(checks)
   st.markdown('**技术参考**:本项目参考 psesaank/FaceRecognitionAttendance 仓库设计思路。匿名检测使用 OpenCV Haar Cascade 模型(保留 Intel 原始许可);演示图片来自 NASA 公开数据集,由 scikit-image 提供。')
 c.close()

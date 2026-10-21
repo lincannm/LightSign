@@ -2,9 +2,9 @@ import sqlite3,time,secrets,hmac,hashlib,json,base64,re
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 def connect(path=None):
- p=Path(path)if path else ROOT/'runtime/activity.sqlite3';p.parent.mkdir(exist_ok=True,parents=True);c=sqlite3.connect(p,timeout=20);c.row_factory=sqlite3.Row;c.execute('PRAGMA journal_mode=WAL');c.execute('PRAGMA foreign_keys=ON');c.executescript('''CREATE TABLE IF NOT EXISTS events(id TEXT PRIMARY KEY,title TEXT NOT NULL,active INTEGER NOT NULL DEFAULT 1,created INTEGER NOT NULL);CREATE TABLE IF NOT EXISTS challenges(nonce TEXT PRIMARY KEY,event TEXT NOT NULL REFERENCES events(id),expires INTEGER NOT NULL);CREATE TABLE IF NOT EXISTS checkins(event TEXT NOT NULL REFERENCES events(id),pseudonym TEXT NOT NULL,created INTEGER NOT NULL,UNIQUE(event,pseudonym));CREATE TABLE IF NOT EXISTS audit(kind TEXT NOT NULL,event TEXT,created INTEGER NOT NULL);''');return c
+ p=Path(path)if path else ROOT/'local_data/activity.sqlite3';p.parent.mkdir(exist_ok=True,parents=True);c=sqlite3.connect(p,timeout=20);c.row_factory=sqlite3.Row;c.execute('PRAGMA journal_mode=WAL');c.execute('PRAGMA foreign_keys=ON');c.executescript('''CREATE TABLE IF NOT EXISTS events(id TEXT PRIMARY KEY,title TEXT NOT NULL,active INTEGER NOT NULL DEFAULT 1,created INTEGER NOT NULL);CREATE TABLE IF NOT EXISTS challenges(nonce TEXT PRIMARY KEY,event TEXT NOT NULL REFERENCES events(id),expires INTEGER NOT NULL);CREATE TABLE IF NOT EXISTS checkins(event TEXT NOT NULL REFERENCES events(id),pseudonym TEXT NOT NULL,created INTEGER NOT NULL,UNIQUE(event,pseudonym));CREATE TABLE IF NOT EXISTS audit(kind TEXT NOT NULL,event TEXT,created INTEGER NOT NULL);''');return c
 def key(path=None):
- p=Path(path)if path else ROOT/'runtime/signing.key';p.parent.mkdir(exist_ok=True,parents=True)
+ p=Path(path)if path else ROOT/'local_data/signing.key';p.parent.mkdir(exist_ok=True,parents=True)
  try:
   with p.open('xb')as f:f.write(secrets.token_bytes(32))
   p.chmod(0o600)

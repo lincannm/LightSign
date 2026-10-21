@@ -1,8 +1,9 @@
 from pathlib import Path
 import sys,tempfile,json,time,threading,concurrent.futures
-sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
+sys.path.insert(0,str(Path(__file__).resolve().parents[2]))
 from light_sign import store
 ROOT=Path(__file__).resolve().parents[1]
+RESULTS=ROOT/'results';RESULTS.mkdir(parents=True,exist_ok=True)
 checks=[]
 with tempfile.TemporaryDirectory()as td:
  path=Path(td)/'db';c=store.connect(path);k=b'controlled-test-key-32bytes-long!!';e=store.event(c,'合成活动');token=store.issue(c,k,e,120,now=1000)
@@ -19,4 +20,4 @@ with tempfile.TemporaryDirectory()as td:
  # Database stores no code, image, email, template or face identifier.
  schema=' '.join(r[0]for r in c.execute("SELECT sql FROM sqlite_master WHERE type='table'"));assert all(s not in schema for s in ['embedding','face_image','email','student_name']);checks.append({'case':'minimal_schema','passed':True})
  c.close()
-(ROOT/'results/system_checks.json').write_text(json.dumps(checks,ensure_ascii=False,indent=2));print('PASS',len(checks),'checks')
+(RESULTS/'system_checks.json').write_text(json.dumps(checks,ensure_ascii=False,indent=2),encoding='utf-8');print('PASS',len(checks),'checks')

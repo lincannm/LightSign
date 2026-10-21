@@ -2,6 +2,7 @@
 
 import contextlib
 import io
+import json
 import os
 from pathlib import Path
 import subprocess
@@ -17,7 +18,7 @@ from light_sign import organizer_qr
 from light_sign.links import extract_token, participant_link
 import run
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 
 
 class LinkTests(unittest.TestCase):
@@ -189,6 +190,22 @@ class EntryPointTests(unittest.TestCase):
         self.assertNotIn("提交签到", [button.label for button in app.button])
         self.assertEqual([checkbox.label for checkbox in app.checkbox], ["二维码自动刷新"])
         self.assertTrue(app.checkbox[0].value)
+
+    def test_organizer_runs_when_experiment_records_are_unavailable(self):
+        read_text = Path.read_text
+        for error in (FileNotFoundError("experiment records omitted"),
+                      json.JSONDecodeError("invalid experiment record", "", 0)):
+            with self.subTest(error=type(error).__name__):
+                def unavailable(path, *args, **kwargs):
+                    if path.parent == ROOT / "experiments" / "results":
+                        raise error
+                    return read_text(path, *args, **kwargs)
+
+                with patch.object(Path, "read_text", unavailable):
+                    app = AppTest.from_file(str(ROOT / "app.py")).run()
+                self.assertEqual(len(app.exception), 0)
+                self.assertTrue(any("当前未附带可读取的实验记录" in item.value for item in app.info))
+                self.assertIn("导出 JSON", [item.label for item in app.get("download_button")])
 
     def test_expired_qr_turns_black_and_cannot_be_downloaded_when_refresh_disabled(self):
         with patch.object(organizer_qr, "time", return_value=1000) as clock, \
