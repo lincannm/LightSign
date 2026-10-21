@@ -46,10 +46,10 @@ python .\experiments\scripts\plot_results.py --font "C:\Windows\Fonts\msyh.ttc"
 
 `make_data.py` 会重建数据清单、合成图片和根目录的体验样例。`stress.py` 按种子 999 重建 40 张挑战图至 `data/stress/`；`plot_results.py` 从已有 JSON 生成四张图至 `results/figures/`。挑战图片、生成图表和重复的评测终端日志已从交付材料中精简，相关生成目录和日志由 `.gitignore` 排除；原指标与失败结果仍保留。
 
-上游竞态审计需要另行取得合法访问权限的参考仓库副本，本项目不分发未获再分发授权的上游代码。只在具备该副本时运行：
+上游竞态审计需要另行取得合法访问权限的参考仓库副本，本项目不分发未获再分发授权的上游代码。只在具备该副本时运行，参数应指向包含 database.py 的 src 目录：
 
 ```powershell
-python .\experiments\scripts\upstream_race.py --upstream-src "D:\参考仓库副本"
+python .\experiments\scripts\upstream_race.py --upstream-src "D:\参考仓库副本\src"
 ```
 
 默认输出为本目录的 `audit/upstream_race_rerun.json`，不会覆盖原 `audit/upstream_race.json`。

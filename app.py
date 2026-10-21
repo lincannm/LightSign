@@ -62,7 +62,7 @@ with tabs[1]:
 with tabs[2]:
  st.subheader('签到记录')
  rr=store.rows(c);st.dataframe(pd.DataFrame(rr),width='stretch');st.download_button('导出 CSV',pd.DataFrame(rr).to_csv(index=False).encode('utf-8-sig'),'checkins.csv','text/csv');st.download_button('导出 JSON',json.dumps(rr,ensure_ascii=False,indent=2),'checkins.json')
- st.caption('时间为UTC时间戳(秒);系统不保存真实姓名、学号、邮箱或人脸数据。代号经过加密处理,但仍可能被关联。请妥善保管 local_data（本地数据）目录。')
+ st.caption('时间为UTC时间戳(秒);系统不保存真实姓名、学号、邮箱或人脸数据。代号仅保存 HMAC 摘要,但仍可能被关联。请妥善保管 local_data（本地数据）目录。')
  with st.expander('测试数据与技术说明'):
   st.subheader('模型测试结果')
   try:
