@@ -1,7 +1,9 @@
 ﻿#requires -Version 5.1
-[CmdletBinding()]
+[CmdletBinding(PositionalBinding = $false)]
 param(
-    [string]$OutputPath = $env:LIGHTSIGN_PACKAGE_OUTPUT
+    [string]$OutputPath = $env:LIGHTSIGN_PACKAGE_OUTPUT,
+    [Parameter(ValueFromRemainingArguments = $true)]
+    [string[]]$PackageArguments
 )
 
 $ErrorActionPreference = 'Stop'
@@ -44,6 +46,30 @@ function Invoke-GitText {
 
 try {
     [Console]::OutputEncoding = New-Object System.Text.UTF8Encoding($false)
+    Write-Host ''
+    Write-Host '============================================================'
+    Write-Host '  LightSign 轻签 - 一键打包项目'
+    Write-Host '============================================================'
+    Write-Host '  按当前 .gitignore 规则打包工作目录，包含未提交的新文件。'
+    Write-Host '  自动排除 Git 仓库目录和打包输出目录。'
+    Write-Host ''
+
+    $showHelp = $PackageArguments.Count -gt 0 -and $PackageArguments[0] -in @('--help', '-h')
+    if ($showHelp -or $PackageArguments.Count -gt 1) {
+        if (-not $showHelp) { Write-Host '[错误] 最多接受一个参数：输出 ZIP 文件路径。' -ForegroundColor Red }
+        Write-Host '使用方法：双击 package.bat，或在命令行指定输出文件路径。'
+        Write-Host ''
+        Write-Host '  package.bat'
+        Write-Host '  package.bat "D:\分享目录\LightSign.zip"'
+        Write-Host ''
+        Write-Host '默认输出：项目目录下的 dist\LightSign_时间戳.zip'
+        Write-Host '打包电脑需要安装 Git；接收者只需解压后双击 START.bat。'
+        Write-Host '已存在的 ZIP 不会被覆盖，请换一个文件名。'
+        if ($showHelp) { exit 0 }
+        exit 1
+    }
+    if ($PackageArguments.Count -eq 1) { $OutputPath = $PackageArguments[0] }
+
     $git = Get-Command git.exe -CommandType Application -ErrorAction SilentlyContinue | Select-Object -First 1
     if (-not $git) {
         throw '未找到 Git，请先安装 Git for Windows 并重新打开脚本。打包无需安装 Python。'
@@ -133,4 +159,8 @@ catch {
     Write-Host "[错误] 打包失败：$($_.Exception.Message)" -ForegroundColor Red
     Write-Host '请检查 Git、项目目录权限和剩余磁盘空间，修复后重新运行。'
     exit 1
+}
+finally {
+    Write-Host ''
+    Write-Host '按任意键关闭本窗口...'
 }

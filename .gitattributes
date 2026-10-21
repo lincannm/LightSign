@@ -1,5 +1,4 @@
-# Keep batch launchers as UTF-8 without BOM and CRLF in the repository.
-# CMD can misparse Chinese commands with LF-only line endings.
-# Disable Git newline conversion so ZIP exports retain CRLF too.
+# Batch wrappers contain ASCII only; Chinese text belongs in BOM-marked PS1.
+# Preserve CRLF in the repository and ZIP exports for Windows launchers.
 *.bat -text whitespace=cr-at-eol
 *.BAT -text whitespace=cr-at-eol
