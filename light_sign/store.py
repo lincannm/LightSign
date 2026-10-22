@@ -34,13 +34,14 @@ def verify(c,k,token,now=None):
   return p,None
  except (ValueError,KeyError,TypeError,UnicodeError):return None,'格式错误'
 def checkin(c,k,token,code,consent,now=None):
- now=int(time.time())if now is None else int(now)
  if not consent:return {'ok':False,'reason':'请先确认自愿参加'}
  code=code.strip().upper()
  if not re.fullmatch(r'[A-Z0-9_-]{3,24}',code):return {'ok':False,'reason':'代号须为3至24位字母数字、横线或下划线'}
  # Transaction serializes validation with close/revoke and uniqueness insertion.
  c.execute('BEGIN IMMEDIATE')
  try:
+  # Read the clock after the write lock so a request queued past expiry is rejected.
+  now=int(time.time())if now is None else int(now)
   p,error=verify(c,k,token,now)
   if error:c.rollback();return {'ok':False,'reason':error}
   pseudo=hmac.new(k,('participant:'+p['e']+':'+code).encode(),hashlib.sha256).hexdigest()
