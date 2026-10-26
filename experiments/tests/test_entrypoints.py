@@ -373,6 +373,10 @@ class EntryPointTests(unittest.TestCase):
         self.assertEqual(len(app.tabs), 0)
         self.assertEqual([button.label for button in app.button], ["提交签到"])
         self.assertTrue(app.button[0].disabled)
+        self.assertEqual(app.radio[0].label, "二维码扫描方式")
+        self.assertEqual(app.radio[0].options, ["上传图片", "摄像头扫码"])
+        self.assertEqual(len(app.text_area), 0)
+        self.assertEqual(app.text_input[0].label, "参与代号（不需要姓名等个人信息）")
 
     def test_checkin_waits_for_browser_receipt(self):
         app = AppTest.from_file(str(ROOT / "participant.py"), default_timeout=APP_TIMEOUT)
@@ -388,6 +392,86 @@ class EntryPointTests(unittest.TestCase):
         self.assertEqual(len(app.exception), 0)
         self.assertTrue(app.button[-1].disabled)
         self.assertEqual(app.warning[0].value, "签名不匹配")
+
+
+    def test_records_display_chinese_headers_and_readable_beijing_time(self):
+        token = store.issue(self.connection, self.key, self.event, now=1000)
+        store.checkin(self.connection, self.key, token, "DEMO01", True, now=1001)
+        app = AppTest.from_file(str(ROOT / "app.py"), default_timeout=APP_TIMEOUT).run()
+        self.assertEqual(len(app.exception), 0)
+        records = app.dataframe[0].value
+        self.assertEqual(list(records.columns), ["活动名称", "活动编号", "参与者匿名编号", "签到时间（北京时间）"])
+        self.assertEqual(records.iloc[0]["签到时间（北京时间）"], "1970-01-01 08:16:41")
+
+    def test_participant_can_finish_after_ten_second_qr_expires(self):
+        token = store.issue(self.connection, self.key, self.event, ttl=10, now=1000)
+        with patch.object(store.time, "time", return_value=1009) as clock, \
+             patch("light_sign.browser_receipt.browser_receipt", return_value={"available": True, "checkedIn": False}):
+            app = AppTest.from_file(str(ROOT / "participant.py"), default_timeout=APP_TIMEOUT)
+            app.query_params["token"] = token
+            app.run()
+            ticket = app.session_state.scan_ticket
+            app.text_input[0].set_value("DEM").run()
+            clock.return_value = 1015
+            app.text_input[0].set_value("DEMO01").run()
+            app.checkbox[0].check().run()
+            self.assertEqual(app.session_state.scan_ticket, ticket)
+            self.assertFalse(app.button[-1].disabled)
+            self.assertEqual(len(app.warning), 0)
+            app.button[-1].click().run()
+            self.assertEqual(len(app.exception), 0)
+            self.assertEqual(app.success[0].value, "本活动已签到，无需重复提交。")
+            self.assertEqual(len(store.rows(self.connection)), 1)
+            self.assertEqual(store.rows(self.connection)[0]["created"], 1015)
+
+    def test_uploaded_scan_survives_reruns_without_query_parameter(self):
+        token = store.issue(self.connection, self.key, self.event, ttl=10, now=1000)
+        with patch.object(store.time, "time", return_value=1009) as clock, \
+             patch("streamlit.file_uploader", return_value=object()), \
+             patch("cv2.QRCodeDetector") as detector, \
+             patch("PIL.Image.open") as image:
+            import numpy as np
+            image.return_value.convert.return_value = np.zeros((10, 10, 3), dtype=np.uint8)
+            detector.return_value.detectAndDecode.return_value = (token, None, None)
+            app = AppTest.from_file(str(ROOT / "participant.py"), default_timeout=APP_TIMEOUT).run()
+            ticket = app.session_state.scan_ticket
+            self.assertEqual(app.session_state.scan_token, token)
+            self.assertEqual(dict(app.query_params), {})
+            clock.return_value = 1015
+            app.text_input[0].set_value("DEMO01").run()
+            self.assertEqual(len(app.exception), 0)
+            self.assertEqual(len(app.warning), 0)
+            self.assertEqual(app.session_state.scan_ticket, ticket)
+            self.assertEqual(app.subheader[0].value, "入口测试活动")
+
+    def test_filling_deadline_does_not_renew_on_rerun(self):
+        token = store.issue(self.connection, self.key, self.event, ttl=10, now=1000)
+        with patch.object(store.time, "time", return_value=1009) as clock:
+            app = AppTest.from_file(str(ROOT / "participant.py"), default_timeout=APP_TIMEOUT)
+            app.query_params["token"] = token
+            app.run()
+            ticket = app.session_state.scan_ticket
+            clock.return_value = 1309
+            app.text_input[0].set_value("DEMO01").run()
+            self.assertEqual(len(app.exception), 0)
+            self.assertEqual(app.warning[0].value, "填写时间已结束，请重新扫描二维码")
+            self.assertEqual(app.session_state.scan_ticket, ticket)
+            self.assertEqual(app.text_input[0].value, "DEMO01")
+            self.assertTrue(app.button[-1].disabled)
+
+    def test_switching_qr_clears_scan_ticket_and_form(self):
+        app = AppTest.from_file(str(ROOT / "participant.py"), default_timeout=APP_TIMEOUT)
+        app.query_params["token"] = self.token
+        app.run()
+        app.text_input[0].set_value("DEMO01").run()
+        app.checkbox[0].check().run()
+        app.button[0].click().run()
+        self.assertEqual(len(app.exception), 0)
+        self.assertNotIn("scan_token", app.session_state)
+        self.assertNotIn("scan_ticket", app.session_state)
+        self.assertEqual(app.text_input[0].value, "")
+        self.assertFalse(app.checkbox[0].value)
+        self.assertEqual(app.radio[0].options, ["上传图片", "摄像头扫码"])
 
 
 if __name__ == "__main__":

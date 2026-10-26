@@ -7,9 +7,9 @@
 | 路径 | 内容 |
 |---|---|
 | `scripts/` | 系统自检、视觉评测、二维码往返、数据生成、绘图和上游竞态审计脚本 |
-| `tests/` | 签到取时、入口、网络、证书与 Windows 启动脚本的回归检查 |
+| `tests/` | 扫码填写凭证、签到取时、入口、网络、证书与 Windows 启动脚本的回归检查（63 项） |
 | `data/` | 源照片、开发集与固定测试集各 80 张图、标注清单和数据来源说明 |
-| `results/` | 与报告对应的指标、逐图预测、十项自检、二维码往返和原实验环境记录 |
+| `results/` | 与报告对应的指标、逐图预测、十项自检、二维码往返、当前回归记录和原实验环境记录 |
 | `audit/` | 上游来源、许可核查、运行记录和竞态实验记录 |
 
 `data/manifest.json` 和 `results/predictions.json` 中的图像路径以本目录为基准，例如 `data/test/000.png`。目录迁移不改变图像、模型、选参记录或已归档的实验指标。原实验平台见 `results/setup.json` 和 `audit/environment.txt`，不能将原平台的耗时视为当前电脑的测试结果。
@@ -22,7 +22,7 @@
 # 十项签到与协议检查
 python .\experiments\scripts\check.py
 
-# 签到取时、双入口、网络、证书与 Windows 脚本回归检查
+# 扫码填写凭证、签到取时、双入口、网络、证书与 Windows 脚本回归检查（63 项）
 python -m unittest discover -s experiments/tests
 
 # 固定开发集选参并评估固定测试集

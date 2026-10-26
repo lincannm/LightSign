@@ -57,12 +57,18 @@ with tabs[1]:
    r=st.session_state.counter_result;a,b=st.columns(2)
    with a:st.image(st.session_state.counter_image,caption='匿名检测结果,框为自动识别,不代表真实人数')
    with b:st.metric('检测到的人脸框数',r['count']);st.metric('处理耗时',f"{r['elapsed_ms']:.1f} ms");st.json(r);st.download_button('下载结果 JSON',json.dumps(r,ensure_ascii=False,indent=2),'anonymous_count.json')
-  st.caption('模型可能漏检、误检或重复清点。检测框数不等于实际人数;照片或屏幕中的人脸也可能被计入。')
  except (UnidentifiedImageError,ValueError,OSError):st.error('图片无法读取,请换个文件试试')
 with tabs[2]:
  st.subheader('签到记录')
- rr=store.rows(c);st.dataframe(pd.DataFrame(rr),width='stretch');st.download_button('导出 CSV',pd.DataFrame(rr).to_csv(index=False).encode('utf-8-sig'),'checkins.csv','text/csv');st.download_button('导出 JSON',json.dumps(rr,ensure_ascii=False,indent=2),'checkins.json')
- st.caption('时间为UTC时间戳(秒);系统不保存真实姓名、学号、邮箱或人脸数据。代号仅保存 HMAC 摘要,但仍可能被关联。请妥善保管 local_data（本地数据）目录。')
+ rr=store.rows(c)
+ records=pd.DataFrame(rr,columns=['title','event','participant','created'])
+ display_records=records.copy()
+ display_records['created']=pd.to_datetime(display_records['created'],unit='s',utc=True).dt.tz_convert('Asia/Shanghai').dt.strftime('%Y-%m-%d %H:%M:%S')
+ display_records=display_records.rename(columns={'title':'活动名称','event':'活动编号','participant':'参与者匿名编号','created':'签到时间（北京时间）'})
+ st.dataframe(display_records,width='stretch',hide_index=True)
+ st.download_button('导出 CSV',records.to_csv(index=False).encode('utf-8-sig'),'checkins.csv','text/csv')
+ st.download_button('导出 JSON',json.dumps(rr,ensure_ascii=False,indent=2),'checkins.json')
+ st.caption('表格时间按北京时间显示；系统不保存真实姓名、学号、邮箱或人脸数据。请妥善保管 local_data（本地数据）目录。')
  with st.expander('测试数据与技术说明'):
   st.subheader('模型测试结果')
   try:

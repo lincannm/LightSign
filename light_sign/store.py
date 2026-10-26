@@ -33,7 +33,47 @@ def verify(c,k,token,now=None):
   if not r['active']:return None,'活动已关闭'
   return p,None
  except (ValueError,KeyError,TypeError,UnicodeError):return None,'格式错误'
-def checkin(c,k,token,code,consent,now=None):
+SCAN_FILL_SECONDS = 300
+
+
+def prepare_checkin(c, k, token, now=None):
+ """在二维码有效时签发填写凭证，仅供当前参与者会话保存。"""
+ now = int(time.time()) if now is None else int(now)
+ _, error = verify(c, k, token, now)
+ if error:
+  return None, error
+ payload = {'qr': hashlib.sha256(token.encode()).hexdigest(), 'at': now,
+            'until': now + SCAN_FILL_SECONDS}
+ body = base64.urlsafe_b64encode(json.dumps(payload, separators=(',', ':')).encode()).decode().rstrip('=')
+ signature = hmac.new(k, ('scan:' + body).encode(), hashlib.sha256).hexdigest()
+ return body + '.' + signature, None
+
+
+def verify_scan(c, k, token, scan_ticket, now=None):
+ """填写期限独立于二维码期限，但撤销和关闭活动仍立即生效。"""
+ now = int(time.time()) if now is None else int(now)
+ try:
+  if len(scan_ticket) > 512:
+   return None, '无效扫码凭证，请重新扫描二维码'
+  body, signature = scan_ticket.split('.')
+  expected = hmac.new(k, ('scan:' + body).encode(), hashlib.sha256).hexdigest()
+  if not hmac.compare_digest(signature, expected):
+   return None, '无效扫码凭证，请重新扫描二维码'
+  payload = json.loads(base64.urlsafe_b64decode(body + '=' * ((-len(body)) % 4)))
+  if (type(payload['at']) is not int or type(payload['until']) is not int
+      or payload['until'] - payload['at'] != SCAN_FILL_SECONDS
+      or payload['at'] > now
+      or payload['qr'] != hashlib.sha256(token.encode()).hexdigest()):
+   return None, '无效扫码凭证，请重新扫描二维码'
+  if now >= payload['until']:
+   return None, '填写时间已结束，请重新扫描二维码'
+  # 签名证明扫码时二维码有效；数据库查询仍使用当前的撤销与活动状态。
+  return verify(c, k, token, now=payload['at'])
+ except (ValueError, KeyError, TypeError, UnicodeError):
+  return None, '无效扫码凭证，请重新扫描二维码'
+
+
+def checkin(c,k,token,code,consent,now=None,*,scan_ticket=None):
  if not consent:return {'ok':False,'reason':'请先确认自愿参加'}
  code=code.strip().upper()
  if not re.fullmatch(r'[A-Z0-9_-]{3,24}',code):return {'ok':False,'reason':'代号须为3至24位字母数字、横线或下划线'}
@@ -42,7 +82,7 @@ def checkin(c,k,token,code,consent,now=None):
  try:
   # Read the clock after the write lock so a request queued past expiry is rejected.
   now=int(time.time())if now is None else int(now)
-  p,error=verify(c,k,token,now)
+  p,error=verify_scan(c,k,token,scan_ticket,now)if scan_ticket is not None else verify(c,k,token,now)
   if error:c.rollback();return {'ok':False,'reason':error}
   pseudo=hmac.new(k,('participant:'+p['e']+':'+code).encode(),hashlib.sha256).hexdigest()
   cur=c.execute('INSERT OR IGNORE INTO checkins VALUES(?,?,?)',(p['e'],pseudo,now));ok=cur.rowcount==1
