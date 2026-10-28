@@ -16,13 +16,28 @@ c=store.connect();k=store.key();tabs=st.tabs(['活动与二维码','人数清点
 with tabs[0]:
  col1,col2=st.columns(2)
  with col1:
-  title=st.text_input('新活动名称',value='开源技术体验活动')
-  if st.button('创建活动'):
-   try:store.event(c,title);st.success('已创建活动')
-   except ValueError as ex:st.error(str(ex))
+  st.subheader('当前活动')
   events=c.execute('SELECT * FROM events ORDER BY created DESC').fetchall()
+  activity_selector=st.container()
+  with st.expander('新建活动',expanded=not events):
+   st.caption('为另一场活动创建独立的签到入口和记录。')
+   with st.form('create_event',border=False):
+    title=st.text_input('新活动名称',placeholder='例如：开源技术体验活动')
+    create=st.form_submit_button('创建活动',type='secondary'if events else'primary')
+   if create:
+    try:
+     st.session_state.selected_event=store.event(c,title)
+     clear_qr()
+     events=c.execute('SELECT * FROM events ORDER BY created DESC').fetchall()
+     st.success('已创建活动，并切换为当前活动')
+    except ValueError as ex:st.error(str(ex))
+  with activity_selector:
+   if events:
+    eid=st.selectbox('选择活动',[r['id']for r in events],key='selected_event',format_func=lambda x:next(r['title']+(' · 开放'if r['active']else' · 已关闭')for r in events if r['id']==x))
+   else:st.info('暂无活动，请在下方创建第一个活动。')
   if events:
-   eid=st.selectbox('选择活动',[r['id']for r in events],format_func=lambda x:next(r['title']+(' · 开放'if r['active']else' · 已关闭')for r in events if r['id']==x))
+   st.divider()
+   st.subheader('二维码设置')
    ttl=st.slider('二维码有效秒数',10,600,120,10)
    auto_refresh=st.checkbox('二维码自动刷新',value=True,key='qr_auto_refresh',help='开启后，到期自动生成新的二维码；关闭后，到期显示黑色过期提示。')
    if st.button('生成限时二维码',type='primary'):
@@ -36,7 +51,11 @@ with tabs[0]:
    if b.button('关闭活动'):
     store.close(c,eid);clear_qr();c.close();st.rerun()
  with col2:
-  if events:show_qr(eid,ttl,auto_refresh)
+  st.subheader('签到二维码')
+  if events:
+   show_qr(eid,ttl,auto_refresh)
+   if st.session_state.get('token_event')!=eid:st.info('设置有效期后，点击“生成限时二维码”展示签到入口。')
+  else:st.info('创建活动后，可在此生成签到二维码。')
 with tabs[1]:
  st.subheader('匿名人数清点')
  source=st.radio('图像来源',['内置样例','上传图片','摄像头拍摄'],horizontal=True)

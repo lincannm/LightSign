@@ -39,7 +39,8 @@ def main():
         st.caption("已载入活动二维码")
         if st.button("改用其他活动二维码"):
             st.query_params.clear()
-            for name in ("scan_token", "scan_ticket", "participant_code", "participant_consent"):
+            for name in ("scan_token", "scan_ticket", "participant_code", "participant_consent",
+                         "rejected_code"):
                 st.session_state.pop(name, None)
             st.rerun()
     else:
@@ -92,18 +93,31 @@ def main():
             st.error("本地存储不可用。请允许此网站保存数据后刷新，再提交签到。")
 
         if event_id and not checked_in:
-            st.caption("扫码成功后有 5 分钟填写代号，期间二维码到期不影响提交。")
+            st.caption("扫码成功后有 5 分钟填写代号，期间二维码到期不影响提交；同一活动内代号不能重复。")
         code = st.text_input("参与代号（不需要姓名等个人信息）", max_chars=24,
                              disabled=checked_in, key="participant_code")
         consent = st.checkbox("我自愿参加活动", disabled=checked_in, key="participant_consent")
+        rejected = st.session_state.get("rejected_code")
+        if rejected and code.strip().upper() != rejected:
+            st.session_state.pop("rejected_code", None)
+            rejected = None
+        if rejected and not checked_in:
+            st.caption(f"代号「{rejected}」在本活动已被使用，请换一个代号再提交。")
         if st.button("本活动已签到" if checked_in else "提交签到", type="primary",
                      disabled=not ready or checked_in or not consent or not code.strip()):
             result = store.checkin(connection, key, token, code, consent, scan_ticket=scan_ticket)
             st.session_state.last_checkin = result
-            if result["ok"] or result["reason"] == "本活动已签到":
+            if result["ok"]:
                 st.session_state.confirmed_events = confirmed_events | {result["event"]}
+                st.session_state.pop("rejected_code", None)
                 st.rerun()
-            st.warning(result["reason"])
+            if result["reason"] == store.DUPLICATE_REASON:
+                # 代号可能被别人先用了：不写本浏览器的已签到标记，允许改代号继续提交。
+                st.session_state.rejected_code = code.strip().upper()
+                st.warning(f"代号「{code.strip().upper()}」在本活动已被使用，请换一个代号再提交。")
+                st.caption("如果刚才那次提交就是你本人完成的，说明已经签到成功，不用再签。")
+            else:
+                st.warning(result["reason"])
 
     finally:
         connection.close()

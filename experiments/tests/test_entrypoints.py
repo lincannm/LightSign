@@ -424,6 +424,36 @@ class EntryPointTests(unittest.TestCase):
             self.assertEqual(len(store.rows(self.connection)), 1)
             self.assertEqual(store.rows(self.connection)[0]["created"], 1015)
 
+    def test_taken_code_is_reported_and_another_code_can_be_submitted(self):
+        token = store.issue(self.connection, self.key, self.event, ttl=60, now=1000)
+        store.checkin(self.connection, self.key, token, "DEMO01", True, now=1001)
+        with patch.object(store.time, "time", return_value=1050), \
+             patch("light_sign.browser_receipt.browser_receipt", return_value={"available": True, "checkedIn": False}):
+            app = AppTest.from_file(str(ROOT / "participant.py"), default_timeout=APP_TIMEOUT)
+            app.query_params["token"] = token
+            app.run()
+            app.text_input[0].set_value("DEMO01").run()
+            app.checkbox[0].check().run()
+            app.button[-1].click().run()
+            self.assertEqual(len(app.exception), 0)
+            self.assertTrue(any("已被使用" in item.value for item in app.warning))
+            # 代号被占用不等于本人已签到：不写本地签到标记，表单保持可编辑。
+            self.assertEqual(app.session_state.get("confirmed_events", set()), set())
+            self.assertEqual(app.text_input[0].value, "DEMO01")
+            self.assertFalse(app.text_input[0].disabled)
+            self.assertFalse(app.button[-1].disabled)
+            self.assertEqual(len(store.rows(self.connection)), 1)
+            app.text_input[0].set_value("DEMO02").run()
+            self.assertFalse(any("已被使用" in item.value for item in app.warning))
+            self.assertEqual(len(app.warning), 0)
+            app.checkbox[0].check().run()
+            app.button[-1].click().run()
+            self.assertEqual(len(app.exception), 0)
+            self.assertEqual(app.success[0].value, "本活动已签到，无需重复提交。")
+        rows = store.rows(self.connection)
+        self.assertEqual(len(rows), 2)
+        self.assertNotEqual(rows[0]["participant"], rows[1]["participant"])
+
     def test_uploaded_scan_survives_reruns_without_query_parameter(self):
         token = store.issue(self.connection, self.key, self.event, ttl=10, now=1000)
         with patch.object(store.time, "time", return_value=1009) as clock, \

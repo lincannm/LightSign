@@ -1,0 +1,56 @@
+{
+  "run_at": "2026-10-26T23:51:57+08:00",
+  "timezone": "Asia/Shanghai",
+  "method": "Streamlit AppTest；临时 SQLite 数据库、测试密钥和示例保留地址；独立交互走查，不计入现有 63 项测试数量。",
+  "source_sha256": {
+    "app.py": "b3be76eb58eae06c38aec1ff395c6868be50d73f206675ee392043d5d8b64710",
+    "participant.py": "52f2de2f38dda3964b269063ed96767ca54d0d0a436c1b127fda6e26290ad9b3",
+    "light_sign/store.py": "d48c9e687326767ffb0717e78ebd073170dba463789e9a0d83215c3751720d4b",
+    "experiments/tests/test_store.py": "92a8b3988abd6c0a42b27c32df82fed2a1e3b76cf42bb52e44bd6136c96d86ad",
+    "experiments/tests/test_entrypoints.py": "39257a39282338f00d60ef2cbad142cfbaf42c320abad02c43a795b16d6b39b2"
+  },
+  "checks_run": 7,
+  "passed": 7,
+  "checks": [
+    {
+      "name": "已有活动时新建表单默认折叠",
+      "passed": true,
+      "details": "当前活动选择框独立展示，新建活动折叠区默认关闭。"
+    },
+    {
+      "name": "创建后自动选中新活动并清除旧码展示",
+      "passed": true,
+      "details": "创建前生成旧活动二维码；创建后选择框指向新活动，会话中的旧二维码、链接和凭证均已清除。"
+    },
+    {
+      "name": "清除展示不等同于撤销旧码",
+      "passed": true,
+      "details": "旧活动已签发凭证仍按原有效期和撤销状态校验；创建新活动不撤销旧活动二维码。"
+    },
+    {
+      "name": "手动切换活动",
+      "passed": true,
+      "details": "创建后可选择原活动，重跑后保持所选活动。"
+    },
+    {
+      "name": "空名称不创建活动也不切换当前活动",
+      "passed": true,
+      "details": "提交空白名称后显示校验提示，活动数量和当前所选活动保持原值。"
+    },
+    {
+      "name": "无活动时自动展开并提示创建",
+      "passed": true,
+      "details": "新会话中无活动时展开新建表单，同时显示暂无活动和二维码空态提示。"
+    },
+    {
+      "name": "首次创建后显式生成二维码",
+      "passed": true,
+      "details": "创建首个活动后已选中该活动，但未签发二维码；点击生成限时二维码后才签发对应活动凭证。"
+    }
+  ],
+  "screenshot": {
+    "path": "docs/comp/diagrams/v14_organizer_events.png",
+    "sha256": "c20a06dbc5f37747642ed83cca872a8e400da726492b2ec0599556360c414c61",
+    "method": "隔离 SQLite 演示数据库中的虚构活动；真实浏览器截图，仅裁剪操作区；活动链接使用文档示例保留地址 http://192.0.2.10:8504/，不使用真实活动数据或本机签名密钥。"
+  }
+}

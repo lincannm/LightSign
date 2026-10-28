@@ -73,6 +73,11 @@ def verify_scan(c, k, token, scan_ticket, now=None):
   return None, '无效扫码凭证，请重新扫描二维码'
 
 
+# 服务端只有摘要，分不清“本人重复提交”和“别人用了同一代号”，两者共用这一条拒绝原因，
+# 由参与者页面负责把第二种情况讲清楚并允许换代号重填。
+DUPLICATE_REASON = '本活动已签到'
+
+
 def checkin(c,k,token,code,consent,now=None,*,scan_ticket=None):
  if not consent:return {'ok':False,'reason':'请先确认自愿参加'}
  code=code.strip().upper()
@@ -86,7 +91,7 @@ def checkin(c,k,token,code,consent,now=None,*,scan_ticket=None):
   if error:c.rollback();return {'ok':False,'reason':error}
   pseudo=hmac.new(k,('participant:'+p['e']+':'+code).encode(),hashlib.sha256).hexdigest()
   cur=c.execute('INSERT OR IGNORE INTO checkins VALUES(?,?,?)',(p['e'],pseudo,now));ok=cur.rowcount==1
-  c.execute('INSERT INTO audit VALUES(?,?,?)',('accepted'if ok else'duplicate',p['e'],now));c.commit();return {'ok':ok,'reason':'签到成功'if ok else'本活动已签到','event':p['e'],'pseudonym':pseudo[:12]}
+  c.execute('INSERT INTO audit VALUES(?,?,?)',('accepted'if ok else'duplicate',p['e'],now));c.commit();return {'ok':ok,'reason':'签到成功'if ok else DUPLICATE_REASON,'event':p['e'],'pseudonym':pseudo[:12]}
  except Exception:c.rollback();raise
 def close(c,eid):c.execute('UPDATE events SET active=0 WHERE id=?',(eid,));c.commit()
 def revoke(c,eid):c.execute('DELETE FROM challenges WHERE event=?',(eid,));c.commit()
