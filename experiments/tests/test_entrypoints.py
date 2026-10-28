@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import subprocess
+import sys
 import tempfile
 import unittest
 from unittest.mock import Mock, patch
@@ -61,6 +62,25 @@ class LauncherTests(unittest.TestCase):
         self.assertEqual(command[command.index("--server.sslCertFile") + 1], "")
         self.assertEqual(command[command.index("--server.port") + 1], "8504")
         self.assertEqual(command[command.index("--logger.level") + 1], "warning")
+
+    def test_servers_start_through_keepalive_launcher(self):
+        command = run.server_command("app.py", "127.0.0.1", 8503, None)
+        self.assertEqual(command[:4], [
+            sys.executable, str(run.ROOT / "run.py"), "--serve", str(run.ROOT / "app.py")])
+        self.assertEqual(command[command.index("--server.port") + 1], "8503")
+
+    def test_launcher_extends_idle_keepalive(self):
+        from streamlit.web.server.starlette import starlette_server
+
+        original = starlette_server._get_uvicorn_config_kwargs
+        try:
+            starlette_server._get_uvicorn_config_kwargs = lambda: {"ws": "auto"}
+            run.extend_keep_alive()
+            kwargs = starlette_server._get_uvicorn_config_kwargs()
+            self.assertEqual(kwargs["timeout_keep_alive"], run.KEEP_ALIVE_SECONDS)
+            self.assertEqual(kwargs["ws"], "auto")
+        finally:
+            starlette_server._get_uvicorn_config_kwargs = original
 
     def test_startup_panel_highlights_both_entries_and_redirects_without_ansi(self):
         args = Mock(organizer_host="127.0.0.1", organizer_port=8503)

@@ -17,6 +17,35 @@ from light_sign.network import participant_base_url
 
 ROOT = Path(__file__).resolve().parent
 
+# 浏览器会把空闲的 HTTP 连接留在连接池里复用，而 uvicorn 默认 5 秒就关闭空闲连接。
+# 生成二维码后隔几秒再点“下载二维码 PNG”（或导出 CSV / JSON）时，浏览器一旦复用了
+# 刚被服务端关闭的连接，请求就会在收到响应前失败，浏览器把下载标记为网络错误。
+# 本机与局域网场景的连接数很少，因此把空闲超时放宽到 1 小时。
+KEEP_ALIVE_SECONDS = 3600
+
+
+def extend_keep_alive():
+    """在创建服务器之前把 uvicorn 的空闲连接超时改成 KEEP_ALIVE_SECONDS。"""
+    from streamlit.web.server.starlette import starlette_server
+
+    build_kwargs = starlette_server._get_uvicorn_config_kwargs
+
+    def build_kwargs_with_keep_alive():
+        kwargs = build_kwargs()
+        kwargs["timeout_keep_alive"] = KEEP_ALIVE_SECONDS
+        return kwargs
+
+    starlette_server._get_uvicorn_config_kwargs = build_kwargs_with_keep_alive
+
+
+def serve(script, streamlit_arguments):
+    """子进程入口：放宽 keep-alive 后按 Streamlit CLI 的参数启动脚本。"""
+    extend_keep_alive()
+    from streamlit.web import cli
+
+    sys.argv = [sys.argv[0], "run", script, *streamlit_arguments]
+    return cli.main()
+
 
 def log(message="", color=None, bold=False, err=False):
     """终端支持时启用颜色，重定向或设置 NO_COLOR 时保留纯文本。"""
@@ -73,8 +102,9 @@ def certificate_files(http=False, hosts=()):
 
 
 def server_command(app, host, port, certificates):
+    # 用本脚本作为子进程入口，好在 Streamlit 创建服务器前调整 keep-alive。
     return [
-        sys.executable, "-m", "streamlit", "run", str(ROOT / app),
+        sys.executable, str(ROOT / "run.py"), "--serve", str(ROOT / app),
         "--server.address", host, "--server.port", str(port),
         "--server.headless", "true",
         # 保留警告和错误，省略与统一启动面板重复的底层启动日志。
@@ -98,6 +128,9 @@ def stop_servers(processes):
 
 
 def main(argv=None):
+    argv = list(sys.argv[1:] if argv is None else argv)
+    if argv[:1] == ["--serve"]:
+        return serve(argv[1], argv[2:])
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--organizer-port", type=port_number, default=8503)
     parser.add_argument("--participant-port", type=port_number, default=8504)
