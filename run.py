@@ -13,6 +13,7 @@ from urllib.parse import urlsplit
 import click
 
 from light_sign import store
+from light_sign.auth import ensure_password, password_path
 from light_sign.network import participant_base_url
 
 ROOT = Path(__file__).resolve().parent
@@ -22,6 +23,8 @@ ROOT = Path(__file__).resolve().parent
 # 刚被服务端关闭的连接，请求就会在收到响应前失败，浏览器把下载标记为网络错误。
 # 本机与局域网场景的连接数很少，因此把空闲超时放宽到 1 小时。
 KEEP_ALIVE_SECONDS = 3600
+
+PASSWORD_HINT = "登录口令位于PASSWORD.conf（局域网访问需输入，本机 localhost 免登录）"
 
 
 def extend_keep_alive():
@@ -53,6 +56,13 @@ def log(message="", color=None, bold=False, err=False):
                color=False if "NO_COLOR" in os.environ else None)
 
 
+def entry_url(scheme, host, port):
+    """按浏览器地址栏的写法拼出入口地址，IPv6 字面量加方括号。"""
+    if ":" in host:
+        host = f"[{host}]"
+    return f"{scheme}://{host}:{port}/"
+
+
 def print_startup(args, scheme, participant_url, certificates):
     log()
     log("  LightSign · 轻签系统", "cyan", bold=True)
@@ -60,11 +70,26 @@ def print_startup(args, scheme, participant_url, certificates):
     log("  " + "─" * 60, "bright_black")
     log()
     log("  组织者入口  ·  活动管理 / 二维码 / 人数清点", "cyan", bold=True)
-    organizer_host = "localhost" if args.organizer_host in ("127.0.0.1", "0.0.0.0") else args.organizer_host
-    if ":" in organizer_host:
-        organizer_host = f"[{organizer_host}]"
-    log(f"  {scheme}://{organizer_host}:{args.organizer_port}/", "cyan", bold=True)
-    log("  访问范围：本机" if args.organizer_host in ("127.0.0.1", "localhost", "::1") else "  访问范围：由 --organizer-host 指定的监听地址决定", "bright_black")
+    # 局域网地址与签到入口使用同一个 IP，保证两种入口在手机/投屏电脑上一致。
+    lan_host = urlsplit(participant_url).hostname if participant_url else None
+    if lan_host in ("localhost", "127.0.0.1", "::1"):
+        lan_host = None
+    if args.organizer_host in ("127.0.0.1", "localhost", "::1"):
+        log(f"  {entry_url(scheme, 'localhost', args.organizer_port)}", "cyan", bold=True)
+        log("  访问范围：仅本机", "bright_black")
+    elif args.organizer_host in ("0.0.0.0", "::", ""):
+        log(f"  本机地址    {entry_url(scheme, 'localhost', args.organizer_port)}", "cyan", bold=True)
+        if lan_host:
+            log(f"  局域网地址  {entry_url(scheme, lan_host, args.organizer_port)}", "cyan", bold=True)
+            log("  同一 Wi-Fi 内的电脑或手机也能打开，IP 与签到入口相同。", "bright_black")
+            log("  组织者入口含管理操作，请在活动结束或离开可信网络后按 Ctrl+C 停止。", "bright_black")
+            log(f"  {PASSWORD_HINT}", "white")
+        else:
+            log("  未检测到局域网地址，当前仅本机可访问。", "yellow")
+    else:
+        log(f"  {entry_url(scheme, args.organizer_host, args.organizer_port)}", "cyan", bold=True)
+        log("  访问范围：由 --organizer-host 指定的监听地址决定", "bright_black")
+        log(f"  {PASSWORD_HINT}", "white")
     log()
     log("  参与者入口  ·  手机扫码签到", "green", bold=True)
     if participant_url:
@@ -134,7 +159,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--organizer-port", type=port_number, default=8503)
     parser.add_argument("--participant-port", type=port_number, default=8504)
-    parser.add_argument("--organizer-host", default="127.0.0.1", help="组织者默认仅本机可访问")
+    parser.add_argument("--organizer-host", default="0.0.0.0", help="组织者默认允许局域网访问，与本机 localhost 同时可用")
     parser.add_argument("--participant-host", default="0.0.0.0", help="参与者默认允许局域网访问")
     parser.add_argument("--participant-url", help="二维码中的参与者入口，例如 https://192.168.1.10:8504/")
     parser.add_argument("--http", action="store_true", help="使用 HTTP，局域网手机摄像头需要 HTTPS")
@@ -179,6 +204,9 @@ def main(argv=None):
         if participant_url:
             hosts.append(urlsplit(participant_url).hostname)
         certificates = certificate_files(args.http, hosts)
+        _, password_created = ensure_password(password_path(ROOT))
+        if password_created:
+            log("[口令] 未找到 PASSWORD.conf，已生成随机登录口令；局域网登录前请打开该文件查看或修改。", "green")
         connection = store.connect()
         connection.close()
         store.key()

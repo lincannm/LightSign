@@ -24,6 +24,13 @@ ROOT = Path(__file__).resolve().parents[2]
 APP_TIMEOUT = 30
 
 
+def organizer_app():
+    """组织者页面先用已登录状态起步，登录门禁本身由 test_auth 覆盖。"""
+    app = AppTest.from_file(str(ROOT / "app.py"), default_timeout=APP_TIMEOUT)
+    app.session_state["organizer_authenticated"] = True
+    return app.run()
+
+
 class LinkTests(unittest.TestCase):
     def test_signed_token_link_roundtrip(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -102,6 +109,13 @@ class LauncherTests(unittest.TestCase):
             with contextlib.redirect_stdout(terminal):
                 run.log("组织者入口", "cyan", bold=True)
             self.assertIn("\x1b[", terminal.getvalue())
+            panel = io.StringIO()
+            panel.isatty = lambda: True
+            with contextlib.redirect_stdout(panel):
+                run.print_startup(Mock(organizer_host="0.0.0.0", organizer_port=8503),
+                                  "https", "https://192.168.1.42:8504/", ("cert", "key"))
+            hint_line, = [line for line in panel.getvalue().splitlines() if f"  {run.PASSWORD_HINT}" in line]
+            self.assertTrue(hint_line.startswith("\x1b[37m"), hint_line)
             os.environ["NO_COLOR"] = "1"
             with contextlib.redirect_stdout(io.StringIO()) as output:
                 run.log("组织者入口", "cyan", bold=True)
@@ -115,7 +129,26 @@ class LauncherTests(unittest.TestCase):
         self.assertIn("http://192.168.1.10:9003/", panel)
         self.assertIn("暂无可分享地址", panel)
         self.assertIn("HTTP 模式", panel)
+        self.assertIn(run.PASSWORD_HINT, panel)
         self.assertNotIn("访问范围：本机", panel)
+
+    def test_startup_panel_offers_localhost_and_lan_for_organizer(self):
+        args = Mock(organizer_host="0.0.0.0", organizer_port=8503)
+        with contextlib.redirect_stdout(io.StringIO()) as output:
+            run.print_startup(args, "https", "https://192.168.1.42:8504/", ("cert", "key"))
+        panel = output.getvalue()
+        self.assertIn("https://localhost:8503/", panel)
+        self.assertIn("https://192.168.1.42:8503/", panel)
+        self.assertIn(run.PASSWORD_HINT, panel)
+        self.assertNotIn("未检测到局域网地址", panel)
+
+    def test_startup_panel_marks_organizer_local_only_without_lan(self):
+        args = Mock(organizer_host="0.0.0.0", organizer_port=8503)
+        with contextlib.redirect_stdout(io.StringIO()) as output:
+            run.print_startup(args, "https", None, ("cert", "key"))
+        panel = output.getvalue()
+        self.assertIn("https://localhost:8503/", panel)
+        self.assertIn("未检测到局域网地址", panel)
 
     def test_configured_certificates_and_missing_files(self):
         with tempfile.TemporaryDirectory() as directory, patch.object(run, "ROOT", Path(directory)):
@@ -149,7 +182,9 @@ class LauncherTests(unittest.TestCase):
         first.poll.return_value = 1
         second.poll.return_value = 1
         first.returncode = second.returncode = 1
-        with patch.object(run, "participant_base_url", return_value="https://192.168.1.42:8504/"), \
+        with tempfile.TemporaryDirectory() as directory, \
+             patch.object(run, "password_path", return_value=Path(directory) / "PASSWORD.conf"), \
+             patch.object(run, "participant_base_url", return_value="https://192.168.1.42:8504/"), \
              patch.object(run.socket, "socket"), \
              patch.object(run, "certificate_files", return_value=(Path("cert"), Path("key"))) as certificates, \
              patch.object(run.store, "connect"), patch.object(run.store, "key"), \
@@ -157,6 +192,7 @@ class LauncherTests(unittest.TestCase):
              contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
             self.assertEqual(run.main([]), 1)
             self.assertIn("192.168.1.42", certificates.call_args.args[1])
+            self.assertTrue((Path(directory) / "PASSWORD.conf").exists())
             for call in popen.call_args_list:
                 self.assertEqual(call.kwargs["env"]["LIGHTSIGN_PARTICIPANT_URL"], "https://192.168.1.42:8504/")
                 self.assertEqual(call.kwargs["env"]["LIGHTSIGN_PARTICIPANT_SCHEME"], "https")
@@ -206,7 +242,7 @@ class EntryPointTests(unittest.TestCase):
         self.directory.cleanup()
 
     def test_organizer_does_not_render_participant_form(self):
-        app = AppTest.from_file(str(ROOT / "app.py"), default_timeout=APP_TIMEOUT).run()
+        app = organizer_app()
         self.assertEqual(len(app.exception), 0)
         self.assertEqual([tab.label for tab in app.tabs], ["活动与二维码", "人数清点", "记录与数据"])
         self.assertNotIn("提交签到", [button.label for button in app.button])
@@ -224,7 +260,7 @@ class EntryPointTests(unittest.TestCase):
                     return read_text(path, *args, **kwargs)
 
                 with patch.object(Path, "read_text", unavailable):
-                    app = AppTest.from_file(str(ROOT / "app.py"), default_timeout=APP_TIMEOUT).run()
+                    app = organizer_app()
                 self.assertEqual(len(app.exception), 0)
                 self.assertTrue(any("当前未附带可读取的实验记录" in item.value for item in app.info))
                 self.assertIn("导出 JSON", [item.label for item in app.get("download_button")])
@@ -232,7 +268,7 @@ class EntryPointTests(unittest.TestCase):
     def test_expired_qr_turns_black_and_cannot_be_downloaded_when_refresh_disabled(self):
         with patch.object(organizer_qr, "time", return_value=1000) as clock, \
              patch.object(network, "participant_base_url", return_value="https://192.168.1.42:8504/"):
-            app = AppTest.from_file(str(ROOT / "app.py"), default_timeout=APP_TIMEOUT).run()
+            app = organizer_app()
             app.checkbox[0].uncheck().run()
             next(button for button in app.button if button.label == "生成限时二维码").click().run()
             token = app.session_state.token
@@ -249,7 +285,7 @@ class EntryPointTests(unittest.TestCase):
     def test_auto_refresh_renews_only_at_expiry_and_uses_current_lifetime(self):
         with patch.object(organizer_qr, "time", return_value=1000) as clock, \
              patch.object(network, "participant_base_url", return_value="https://192.168.1.42:8504/"):
-            app = AppTest.from_file(str(ROOT / "app.py"), default_timeout=APP_TIMEOUT).run()
+            app = organizer_app()
             next(button for button in app.button if button.label == "生成限时二维码").click().run()
             original_token = app.session_state.token
             original_png = app.session_state.qr_png
@@ -271,7 +307,7 @@ class EntryPointTests(unittest.TestCase):
     def test_enabling_auto_refresh_replaces_an_expired_qr(self):
         with patch.object(organizer_qr, "time", return_value=1000) as clock, \
              patch.object(network, "participant_base_url", return_value="https://192.168.1.42:8504/"):
-            app = AppTest.from_file(str(ROOT / "app.py"), default_timeout=APP_TIMEOUT).run()
+            app = organizer_app()
             app.checkbox[0].uncheck().run()
             next(button for button in app.button if button.label == "生成限时二维码").click().run()
             original_token = app.session_state.token
@@ -288,7 +324,7 @@ class EntryPointTests(unittest.TestCase):
 
         with patch.object(organizer_qr, "time", return_value=1000) as clock, \
              patch.object(network, "participant_base_url", return_value="https://192.168.1.42:8504/"):
-            app = AppTest.from_file(str(ROOT / "app.py"), default_timeout=APP_TIMEOUT).run()
+            app = organizer_app()
             next(button for button in app.button if button.label == "生成限时二维码").click().run()
             token = app.session_state.token
             fragment_id, = app._fragment_storage._fragments
@@ -306,7 +342,7 @@ class EntryPointTests(unittest.TestCase):
     def test_existing_qr_session_builds_missing_png_without_reissuing(self):
         with patch.object(organizer_qr, "time", return_value=1000), \
              patch.object(network, "participant_base_url", return_value="https://192.168.1.42:8504/"):
-            app = AppTest.from_file(str(ROOT / "app.py"), default_timeout=APP_TIMEOUT).run()
+            app = organizer_app()
             next(button for button in app.button if button.label == "生成限时二维码").click().run()
             token = app.session_state.token
             del app.session_state["qr_png"]
@@ -320,7 +356,7 @@ class EntryPointTests(unittest.TestCase):
             with self.subTest(action=action.__name__), \
                  patch.object(organizer_qr, "time", return_value=1000) as clock, \
                  patch.object(network, "participant_base_url", return_value="https://192.168.1.42:8504/"):
-                app = AppTest.from_file(str(ROOT / "app.py"), default_timeout=APP_TIMEOUT).run()
+                app = organizer_app()
                 next(button for button in app.button if button.label == "生成限时二维码").click().run()
                 original_token = app.session_state.token
                 action(self.connection, self.event)
@@ -333,7 +369,7 @@ class EntryPointTests(unittest.TestCase):
     def test_auto_refresh_failure_keeps_expired_qr_black(self):
         with patch.object(organizer_qr, "time", return_value=1000) as clock, \
              patch.object(network, "participant_base_url", return_value="https://192.168.1.42:8504/") as address:
-            app = AppTest.from_file(str(ROOT / "app.py"), default_timeout=APP_TIMEOUT).run()
+            app = organizer_app()
             next(button for button in app.button if button.label == "生成限时二维码").click().run()
             original_token = app.session_state.token
             address.side_effect = ValueError("请连接 Wi-Fi")
@@ -348,7 +384,7 @@ class EntryPointTests(unittest.TestCase):
         for label in ("撤销该活动二维码", "关闭活动"):
             with self.subTest(label=label), patch.object(organizer_qr, "time", return_value=1000), \
                  patch.object(network, "participant_base_url", return_value="https://192.168.1.42:8504/"):
-                app = AppTest.from_file(str(ROOT / "app.py"), default_timeout=APP_TIMEOUT).run()
+                app = organizer_app()
                 next(button for button in app.button if button.label == "生成限时二维码").click().run()
                 next(button for button in app.button if button.label == label).click().run()
                 app.run()
@@ -363,7 +399,7 @@ class EntryPointTests(unittest.TestCase):
             with patch.dict("os.environ"):
                 import os
                 os.environ.pop("LIGHTSIGN_PARTICIPANT_URL", None)
-                app = AppTest.from_file(str(ROOT / "app.py"), default_timeout=APP_TIMEOUT).run()
+                app = organizer_app()
                 next(button for button in app.button if button.label == "生成限时二维码").click().run()
             self.assertEqual(len(app.exception), 0)
             self.assertEqual([field.label for field in app.text_input], ["新活动名称"])
@@ -376,7 +412,7 @@ class EntryPointTests(unittest.TestCase):
 
     def test_missing_network_does_not_issue_token_or_leave_stale_qr(self):
         with patch.object(network, "participant_base_url", side_effect=ValueError("请连接 Wi-Fi")):
-            app = AppTest.from_file(str(ROOT / "app.py"), default_timeout=APP_TIMEOUT).run()
+            app = organizer_app()
             app.session_state.token = "old-token"
             app.session_state.participant_link = "http://old-address/"
             app.session_state.token_event = self.event
@@ -417,7 +453,7 @@ class EntryPointTests(unittest.TestCase):
     def test_records_display_chinese_headers_and_readable_beijing_time(self):
         token = store.issue(self.connection, self.key, self.event, now=1000)
         store.checkin(self.connection, self.key, token, "DEMO01", True, now=1001)
-        app = AppTest.from_file(str(ROOT / "app.py"), default_timeout=APP_TIMEOUT).run()
+        app = organizer_app()
         self.assertEqual(len(app.exception), 0)
         records = app.dataframe[0].value
         self.assertEqual(list(records.columns), ["活动名称", "活动编号", "参与者匿名编号", "签到时间（北京时间）"])

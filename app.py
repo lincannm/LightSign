@@ -4,9 +4,11 @@ import pandas as pd
 from PIL import Image,UnidentifiedImageError
 from light_sign import store
 from light_sign.organizer_qr import clear_qr,issue_qr,show_qr
+from light_sign import auth
 from light_sign.vision import Counter,ROOT
 
 st.set_page_config(page_title='轻签 · 组织者管理',page_icon='🔷',layout='wide')
+auth.require_login()
 st.title('轻签 · 组织者管理')
 st.caption('活动与二维码 / 人数清点 / 签到记录导出')
 st.info('用于自愿活动签到。视觉清点只输出匿名人脸框数量，不识别身份、不关联签到记录。演示图片和参与代号均为合成样例。')
@@ -70,8 +72,10 @@ with tabs[1]:
    f=st.camera_input('拍摄照片,不会保存原图')
    if f:im=Image.open(f)
   mode=json.loads((ROOT/'models/policy.json').read_text())['mode']
-  if st.button('开始清点',type='primary')and im is not None:
-   result,safe=counter().run(im,mode);st.session_state.counter_result=result;st.session_state.counter_image=safe
+  if im is None:st.info('请先上传图片或拍摄照片，再开始清点。')
+  if st.button('开始清点',type='primary',disabled=im is None):
+   with st.spinner('正在匿名清点，请稍候……'):
+    result,safe=counter().run(im,mode);st.session_state.counter_result=result;st.session_state.counter_image=safe
   if st.session_state.get('counter_result'):
    r=st.session_state.counter_result;a,b=st.columns(2)
    with a:st.image(st.session_state.counter_image,caption='匿名检测结果,框为自动识别,不代表真实人数')

@@ -9,6 +9,8 @@ class Counter:
   self.model=cv2.CascadeClassifier(str(ROOT/'models/haarcascade_frontalface_default.xml'))
   if self.model.empty():raise RuntimeError('匿名检测模型缺失')
  def run(self,image,mode='clahe'):
+  # 每个处理线程显式使用 CPU，避免部分 Windows OpenCL 驱动在检测时卡住。
+  cv2.ocl.setUseOpenCL(False)
   start=time.perf_counter();im=ImageOps.exif_transpose(image).convert('RGB');im.thumbnail((960,720));rgb=np.array(im);gray=cv2.cvtColor(rgb,cv2.COLOR_RGB2GRAY)
   if mode=='clahe':gray=cv2.createCLAHE(clipLimit=2,tileGridSize=(8,8)).apply(gray)
   elif mode=='gamma':

@@ -3,6 +3,7 @@ local_data/
 __pycache__/
 *.pyc
 .DS_Store
+/PASSWORD.conf
 docs/
 AGENTS.md
 

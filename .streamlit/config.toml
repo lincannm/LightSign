@@ -4,8 +4,9 @@ sslCertFile = "certs/cert.pem"
 sslKeyFile = "certs/key.pem"
 
 # 组织者入口端口；run.py 会另启 8504 端口的参与者入口
+# 监听地址由 run.py 通过 --server.address 传入（默认 0.0.0.0，本机与局域网同时可访问）
 port = 8503
-address = "127.0.0.1"
+address = "0.0.0.0"
 
 # 参与者服务的局域网监听地址由 run.py 单独配置
 headless = true
