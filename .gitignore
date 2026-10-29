@@ -5,7 +5,12 @@ __pycache__/
 .DS_Store
 /PASSWORD.conf
 docs/
+# 技术报告草稿仅本地保留，不随仓库提交
+docs/comp/new_report/
 AGENTS.md
+
+# 本地人脸评测标注集，仅开发期回归使用
+samples_yunet/
 
 # SSL 证书和私钥(自签名证书可以重新生成)
 certs/*.pem
