@@ -18,6 +18,29 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class CounterTests(unittest.TestCase):
+    def test_yunet_counts_current_samples_and_preserves_metadata(self):
+        counter = vision.Counter()
+        with Image.open(ROOT / 'samples' / '多人合成样例.png') as image:
+            result, safe = counter.run(image)
+        self.assertEqual(result['count'], 4)
+        self.assertEqual(result['mode'], 'yunet')
+        self.assertEqual(result['backend'], 'opencv_cpu')
+        self.assertEqual(result['model'], 'face_detection_yunet_2023mar.onnx')
+        self.assertEqual(len(result['scores']), 4)
+        self.assertEqual(safe.size, (640, 480))
+
+    def test_yunet_test_set_is_readable_without_using_predictions_as_labels(self):
+        annotations = json.loads((ROOT / 'samples_yunet' / 'annotations.json').read_text(encoding='utf-8'))
+        self.assertEqual(set(annotations['images']), {'1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg'})
+        self.assertTrue(all(isinstance(item['count'], int) for item in annotations['images'].values()))
+        counter = vision.Counter()
+        for path in sorted((ROOT / 'samples_yunet').glob('*.jpg')):
+            with self.subTest(path=path.name):
+                with Image.open(path) as image:
+                    result, safe = counter.run(image)
+            self.assertGreaterEqual(result['count'], 0)
+            self.assertEqual(safe.size, image.size)
+
     def test_samples_finish_in_fresh_process_without_opencl_configuration(self):
         # 子进程设定超时，让驱动卡死回归能够明确失败，而非挂住整个测试。
         script = """

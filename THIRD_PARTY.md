@@ -1,12 +1,13 @@
 # 开源及第三方资源使用清单
 
-核查日期 2026-10-24。本表区分参考仓库与可合法再分发的资源；根目录 LICENSE（MIT）只覆盖项目自主编写的代码，不覆盖下列第三方资源。完整环境版本见 experiments/audit/environment.txt，数据来源与使用边界见 experiments/data/README.md。
+核查日期 2026-10-29。本表区分参考仓库与可合法再分发的资源；根目录 LICENSE（MIT）只覆盖项目自主编写的代码，不覆盖下列第三方资源。完整环境版本见 experiments/audit/environment.txt，数据来源与使用边界见 experiments/data/README.md。
 
 |资源/类型|版本与来源|许可|使用、义务与自主边界|状态及开放方式|
 |---|---|---|---|---|
 |FaceRecognitionAttendance 参考仓库|psesaank，commit980986f55e69bc5c6125ae81abf190af6755656a；https://github.com/psesaank/FaceRecognitionAttendance|未发现LICENSE或明确授权|仅本地审查和运行数据库对照；不复制或再分发源代码、图片、数据库或模型；非授权fork|已核验（不分发，仅保留链接、提交号、哈希与审计结论）|
-|OpenCV运行库|4.10.0实测，https://opencv.org/|Apache-2.0及依赖条款|匿名Haar检测、CLAHE、二维码解码；未修改库；官方依赖安装时遵守NOTICE与第三方条款|已核验（提供pyproject.toml与uv.lock，不打包整个环境）|
-|Haar正面人脸模型XML|随OpenCV4.10.0，models中原文件及哈希|XML内Intel开源计算机视觉许可，Copyright2000 Intel|保留完整版权、条件与免责；不得用Intel名义背书；原模型不修改，新增预处理和评估独立实现|已核验（随源码分发原XML；不声称为团队训练成果）|
+|OpenCV运行库|4.10.0实测，https://opencv.org/|Apache-2.0及依赖条款|YuNet人脸检测、二维码解码；未修改库；官方依赖安装时遵守NOTICE与第三方条款|已核验（提供pyproject.toml与uv.lock，不打包整个环境）|
+
+|YuNet人脸检测模型|OpenCV Zoo `face_detection_yunet_2023mar.onnx`，固定 revision 48b10fa505aeb51fbd127fc60a5c660040e823b7；模型SHA-256见 `models/yunet.provenance.json`|MIT，完整文本见 `models/LICENSE.yunet`|仅用于人脸框检测，不使用SFace或任何身份特征；保留模型版权、许可和来源元数据|已核验（模型随项目仓库分发；不自动联网下载）|
 |NASA源照片|scikit-image.data.astronaut，https://scikit-image.org/docs/stable/api/skimage.data.html#skimage.data.astronaut|官方说明public domain/no known copyright restrictions|注明NASA/scikit-image；裁剪、合成、标注属于修改；不暗示人物/NASA背书|已核验（分发原图和变体，仅工程验证，不作身份识别库）|
 |Streamlit与click|Streamlit 原实验1.65.0、当前锁定1.66.0；click 8.5.0，https://streamlit.io/|Apache-2.0 / BSD-3-Clause|本地Web界面、表单与启动终端输出，未修改库；新增页面独立实现|已核验（依赖安装，保留适用条款）|
 |qrcode|8.2，https://pypi.org/project/qrcode/|BSD-3-Clause|将签名文本编码成二维码；未修改库|已核验（依赖安装，保留版权及免责）|

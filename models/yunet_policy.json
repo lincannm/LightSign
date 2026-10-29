@@ -1,0 +1,7 @@
+{
+  "score_threshold": 0.9,
+  "nms_threshold": 0.3,
+  "top_k": 5000,
+  "max_long_edge": 1600,
+  "selection": "score/NMS/top-k follow OpenCV Zoo demo; image size is a fixed engineering default"
+}

@@ -32,7 +32,7 @@ python .\experiments\scripts\evaluate.py
 python .\experiments\scripts\qr_roundtrip.py
 ```
 
-**先归档再复跑**：`check.py` 会覆盖 `results/system_checks.json`，`evaluate.py` 会覆盖逐图预测、视觉汇总以及根目录的 `models/policy.json`，`qr_roundtrip.py` 会覆盖二维码往返结果（可用 `--output` 另存）。请先将这些文件复制到独立备份位置，给新结果标注环境和代码版本，不要把新旧实验记录混用。
+**先归档再复跑**：`check.py` 会覆盖 `results/system_checks.json`，`evaluate.py` 会在 `experiments/` 下创建新的 YuNet 合成数据评测目录，`qr_roundtrip.py` 会覆盖二维码往返结果（可用 `--output` 另存）。请先将这些文件复制到独立备份位置，给新结果标注环境和代码版本，不要把新旧实验记录混用。
 
 重建合成数据或绘图前，安装可选依赖：
 
@@ -45,6 +45,14 @@ python .\experiments\scripts\plot_results.py --font "C:\Windows\Fonts\msyh.ttc"
 ```
 
 `make_data.py` 会重建数据清单、合成图片和根目录的体验样例。`plot_results.py` 从已有 JSON 生成三张图至 `results/figures/`，可用 `--out` 指定其他目录。生成图表和重复的评测终端日志不随交付材料提供，相关目录由 `.gitignore` 排除。
+
+YuNet 评测脚本固定使用原有合成数据集，运行后在 `experiments/` 下创建新的结果目录，保存模型版本、源码提交号、汇总指标和逐图预测框，不覆盖历史结果：
+
+```powershell
+python .\experiments\scripts\evaluate.py
+```
+
+当前 YuNet 结果见 `experiments/yunet_synthetic_20261029_101831/results.json`。
 
 上游竞态审计需要另行取得合法访问权限的参考仓库副本，本项目不分发未获再分发授权的上游代码。只在具备该副本时运行，参数应指向包含 database.py 的 src 目录：
 

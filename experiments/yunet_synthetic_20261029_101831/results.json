@@ -1,0 +1,4082 @@
+{
+  "created_at": "2026-10-29T10:18:31.073603+08:00",
+  "git_commit": "5c066d610140e66e387c0cb6343940ae542e9afd",
+  "python": "3.12.12",
+  "opencv": "4.10.0",
+  "model": {
+    "model": "face_detection_yunet_2023mar.onnx",
+    "repository": "https://github.com/opencv/opencv_zoo",
+    "revision": "48b10fa505aeb51fbd127fc60a5c660040e823b7",
+    "url": "https://media.githubusercontent.com/media/opencv/opencv_zoo/48b10fa505aeb51fbd127fc60a5c660040e823b7/models/face_detection_yunet/face_detection_yunet_2023mar.onnx",
+    "sha256": "8f2383e4dd3cfbb4553ea8718107fc0423210dc964f9f4280604804ed2552fa4",
+    "size_bytes": 232589,
+    "license": "MIT",
+    "license_file": "LICENSE.yunet",
+    "retrieved_at": "2026-10-29",
+    "purpose": "face detection only; no recognition or identity embeddings"
+  },
+  "manifest_sha256": "4c4807f94082890ca072187be17dc24a889a8ca5488168f205551b159c7e9002",
+  "protocol": "固定 YuNet 参数，development/test 分别报告；不对测试集选参。IoU≥0.5。",
+  "summary": [
+    {
+      "split": "development",
+      "images": 80,
+      "tp": 151,
+      "fp": 0,
+      "fn": 9,
+      "precision": 1.0,
+      "recall": 0.94375,
+      "f1": 0.9710610932475884,
+      "count_mae": 0.1125,
+      "count_exact": 0.8875,
+      "median_ms": 16.425299996626563,
+      "p95_ms": 18.0915550008649
+    },
+    {
+      "split": "test",
+      "images": 80,
+      "tp": 153,
+      "fp": 0,
+      "fn": 7,
+      "precision": 1.0,
+      "recall": 0.95625,
+      "f1": 0.9776357827476039,
+      "count_mae": 0.0875,
+      "count_exact": 0.9125,
+      "median_ms": 16.61305000016,
+      "p95_ms": 18.56289500137791
+    }
+  ],
+  "predictions": [
+    {
+      "file": "experiments/data/development/000.png",
+      "sha256": "32914ff7b17d3f2ce070b3b2d87009bf594d2c064f0a91dd1ea74b24fe5e036f",
+      "split": "development",
+      "condition": "clean",
+      "count": 0,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 53.048000001581386,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/001.png",
+      "sha256": "52bfd0ce58703555463dafa4fa665cd785cc2f01e80eeec649db1ed580b9a1c7",
+      "split": "development",
+      "condition": "clean",
+      "count": 1,
+      "prediction": [
+        [
+          97,
+          75,
+          46,
+          56
+        ]
+      ],
+      "pred_count": 1,
+      "elapsed_ms": 15.291999996406958,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/002.png",
+      "sha256": "6b23b85aa4c885df2503817587a803f7f51e78e7931422451629aceb521cb146",
+      "split": "development",
+      "condition": "clean",
+      "count": 2,
+      "prediction": [
+        [
+          368,
+          27,
+          68,
+          85
+        ],
+        [
+          32,
+          59,
+          88,
+          107
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 16.73319999827072,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/003.png",
+      "sha256": "fa2aa0ae30f7bc13a3b67a1e9231233f391a5515beae9dcb49adba7a7f1f1fc4",
+      "split": "development",
+      "condition": "clean",
+      "count": 3,
+      "prediction": [
+        [
+          346,
+          61,
+          69,
+          80
+        ],
+        [
+          48,
+          80,
+          54,
+          66
+        ],
+        [
+          26,
+          320,
+          95,
+          107
+        ]
+      ],
+      "pred_count": 3,
+      "elapsed_ms": 17.95690000290051,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/004.png",
+      "sha256": "056b1b406d7be848bdb613f2cceb38f54ca1b13cca69db89d401fd19efdf85bb",
+      "split": "development",
+      "condition": "clean",
+      "count": 4,
+      "prediction": [
+        [
+          44,
+          25,
+          76,
+          97
+        ],
+        [
+          349,
+          39,
+          60,
+          71
+        ],
+        [
+          417,
+          281,
+          39,
+          45
+        ],
+        [
+          39,
+          331,
+          48,
+          54
+        ]
+      ],
+      "pred_count": 4,
+      "elapsed_ms": 16.71230001375079,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/005.png",
+      "sha256": "376e626e1193eb1c0e05d0cffa20bf6f903639daf3a240376f55eae0ca1e8e2d",
+      "split": "development",
+      "condition": "clean",
+      "count": 0,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 16.759499994805083,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/006.png",
+      "sha256": "e25dd9544b7e418e0904e6fa91ba8140c243c3e1b4043de273db9fbaf4b13411",
+      "split": "development",
+      "condition": "clean",
+      "count": 1,
+      "prediction": [
+        [
+          46,
+          41,
+          60,
+          72
+        ]
+      ],
+      "pred_count": 1,
+      "elapsed_ms": 16.483999992487952,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/007.png",
+      "sha256": "04ab82b843bf7484e60fd379f792fdb44cdb91589a35d60ce45ac9d391001524",
+      "split": "development",
+      "condition": "clean",
+      "count": 2,
+      "prediction": [
+        [
+          94,
+          48,
+          44,
+          52
+        ],
+        [
+          371,
+          68,
+          76,
+          95
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 16.916300024604425,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/008.png",
+      "sha256": "9e6b253f60ea4e2a2c4b85924b5b4dfefacf52a5078fc2b5ab5c050ab808e050",
+      "split": "development",
+      "condition": "clean",
+      "count": 3,
+      "prediction": [
+        [
+          363,
+          28,
+          76,
+          98
+        ],
+        [
+          30,
+          67,
+          91,
+          110
+        ],
+        [
+          37,
+          281,
+          53,
+          63
+        ]
+      ],
+      "pred_count": 3,
+      "elapsed_ms": 17.522199981613085,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/009.png",
+      "sha256": "59566dccec9fb24d4ec00c658582506d1f1f484bd833c72a29f3ae7a319cd965",
+      "split": "development",
+      "condition": "clean",
+      "count": 4,
+      "prediction": [
+        [
+          30,
+          45,
+          94,
+          114
+        ],
+        [
+          403,
+          89,
+          52,
+          63
+        ],
+        [
+          42,
+          321,
+          79,
+          101
+        ],
+        [
+          354,
+          321,
+          91,
+          109
+        ]
+      ],
+      "pred_count": 4,
+      "elapsed_ms": 17.172899999422953,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/010.png",
+      "sha256": "d41de9f0aafa2a1ade83f307a0ca7f791d98c713fba299e3c94fb298f3094f0b",
+      "split": "development",
+      "condition": "clean",
+      "count": 0,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 15.850900002988055,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/011.png",
+      "sha256": "9dfbf0f6ee64f7231eaea16613f569a3d012e407613018bdc521c29935d5bac2",
+      "split": "development",
+      "condition": "clean",
+      "count": 1,
+      "prediction": [
+        [
+          47,
+          67,
+          47,
+          53
+        ]
+      ],
+      "pred_count": 1,
+      "elapsed_ms": 15.590499999234453,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/012.png",
+      "sha256": "321bfe7da85b4c1cc85d2dab33f9581d11a6f4ff60b6167eca69938e80e3747b",
+      "split": "development",
+      "condition": "clean",
+      "count": 2,
+      "prediction": [
+        [
+          23,
+          23,
+          61,
+          72
+        ],
+        [
+          365,
+          86,
+          80,
+          98
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 17.378499993355945,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/013.png",
+      "sha256": "c73978878e79026db2f70382fa8ed56f689b243980e6ce743b5c1b39733de89f",
+      "split": "development",
+      "condition": "clean",
+      "count": 3,
+      "prediction": [
+        [
+          29,
+          49,
+          89,
+          104
+        ],
+        [
+          349,
+          56,
+          79,
+          95
+        ],
+        [
+          26,
+          323,
+          95,
+          110
+        ]
+      ],
+      "pred_count": 3,
+      "elapsed_ms": 17.356700001982972,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/014.png",
+      "sha256": "c1d0a165ea07a73817b147c0c050b2657e479a6256230eb2f67583f612a57024",
+      "split": "development",
+      "condition": "clean",
+      "count": 4,
+      "prediction": [
+        [
+          378,
+          40,
+          46,
+          50
+        ],
+        [
+          40,
+          59,
+          76,
+          91
+        ],
+        [
+          351,
+          270,
+          75,
+          90
+        ],
+        [
+          44,
+          333,
+          82,
+          99
+        ]
+      ],
+      "pred_count": 4,
+      "elapsed_ms": 16.118800005642697,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/015.png",
+      "sha256": "df6de0583c11ad08665ce9de81cce886b12b737bf452b7c9584fe19e4047e474",
+      "split": "development",
+      "condition": "clean",
+      "count": 0,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 14.916499989340082,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/016.png",
+      "sha256": "8dbace19aadcb53eec475006f52c2a30399bac67f4f5c83c3c8ddd25ef87c437",
+      "split": "development",
+      "condition": "clean",
+      "count": 1,
+      "prediction": [
+        [
+          50,
+          27,
+          53,
+          64
+        ]
+      ],
+      "pred_count": 1,
+      "elapsed_ms": 17.124000005424023,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/017.png",
+      "sha256": "5967b4429d792d4b428a8e9334a23d3145935a495cb4f18d8b72802c23090ffb",
+      "split": "development",
+      "condition": "clean",
+      "count": 2,
+      "prediction": [
+        [
+          55,
+          80,
+          70,
+          85
+        ],
+        [
+          370,
+          82,
+          71,
+          87
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 15.959499985910952,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/018.png",
+      "sha256": "abf8d0e84766d3838dcdadafaa84a87f9aa2b5d8106611507c03f3b491dd595e",
+      "split": "development",
+      "condition": "clean",
+      "count": 3,
+      "prediction": [
+        [
+          60,
+          60,
+          73,
+          89
+        ],
+        [
+          367,
+          65,
+          61,
+          72
+        ],
+        [
+          33,
+          274,
+          74,
+          92
+        ]
+      ],
+      "pred_count": 3,
+      "elapsed_ms": 16.351500002201647,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/019.png",
+      "sha256": "7d17e1e561cb91bbb722202b6bbdb1770d1175960e440c5c5bc1f1bde3a565d8",
+      "split": "development",
+      "condition": "clean",
+      "count": 4,
+      "prediction": [
+        [
+          57,
+          77,
+          40,
+          47
+        ],
+        [
+          353,
+          78,
+          57,
+          70
+        ],
+        [
+          347,
+          279,
+          84,
+          102
+        ],
+        [
+          63,
+          312,
+          71,
+          87
+        ]
+      ],
+      "pred_count": 4,
+      "elapsed_ms": 17.078999982913956,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/020.png",
+      "sha256": "182a1a5bcfb7c1e3ee5832766fa82a6a021a7248e8feb11c6d3507d4a7653c8b",
+      "split": "development",
+      "condition": "dark",
+      "count": 0,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 14.76120000006631,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/021.png",
+      "sha256": "e83f7f6d2eca51ba27b90964472c3d884073a7639b017577eb4ec2927f46cc68",
+      "split": "development",
+      "condition": "dark",
+      "count": 1,
+      "prediction": [
+        [
+          22,
+          61,
+          64,
+          77
+        ]
+      ],
+      "pred_count": 1,
+      "elapsed_ms": 16.22520000091754,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/022.png",
+      "sha256": "1dc670d3b2e9e79492fa0cafa26d902e69ec3407601b12178bf28f8b4cea9521",
+      "split": "development",
+      "condition": "dark",
+      "count": 2,
+      "prediction": [
+        [
+          358,
+          21,
+          50,
+          59
+        ],
+        [
+          56,
+          77,
+          71,
+          86
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 15.58929999009706,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/023.png",
+      "sha256": "98feda71c697bb5df3b53667a47b35d40e6bb0ff2dba13599c7d38e60d50c3b9",
+      "split": "development",
+      "condition": "dark",
+      "count": 3,
+      "prediction": [
+        [
+          34,
+          37,
+          56,
+          68
+        ],
+        [
+          396,
+          49,
+          62,
+          73
+        ],
+        [
+          41,
+          328,
+          61,
+          76
+        ]
+      ],
+      "pred_count": 3,
+      "elapsed_ms": 15.617299999576062,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/024.png",
+      "sha256": "7000eee9323709494eb94e598857034ced7a7cbfc0d61c1ac21ca70651f3579b",
+      "split": "development",
+      "condition": "dark",
+      "count": 4,
+      "prediction": [
+        [
+          405,
+          66,
+          41,
+          50
+        ],
+        [
+          52,
+          84,
+          69,
+          88
+        ],
+        [
+          25,
+          295,
+          66,
+          82
+        ],
+        [
+          360,
+          317,
+          64,
+          75
+        ]
+      ],
+      "pred_count": 4,
+      "elapsed_ms": 15.47840001876466,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/025.png",
+      "sha256": "6dea272e002f55e149543ba02a97768b0a2c73ff7583d9b70ac9de5b168a0d59",
+      "split": "development",
+      "condition": "dark",
+      "count": 0,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 16.056799999205396,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/026.png",
+      "sha256": "9008a796dc88e521019fdc1cc35ef0e6e52b2445ec4c242284bddf8221748731",
+      "split": "development",
+      "condition": "dark",
+      "count": 1,
+      "prediction": [
+        [
+          30,
+          52,
+          43,
+          51
+        ]
+      ],
+      "pred_count": 1,
+      "elapsed_ms": 16.000300005543977,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/027.png",
+      "sha256": "2256566684e89c7f88b596e8081519bbdb41a5e51294305b832fdc597f16e922",
+      "split": "development",
+      "condition": "dark",
+      "count": 2,
+      "prediction": [
+        [
+          350,
+          65,
+          62,
+          75
+        ],
+        [
+          68,
+          91,
+          68,
+          80
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 16.156400000909343,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/028.png",
+      "sha256": "8cfc42dd47b3c0abef6bc55b626742ddc9379b98c4ed583ecc2cba3419089c33",
+      "split": "development",
+      "condition": "dark",
+      "count": 3,
+      "prediction": [
+        [
+          355,
+          48,
+          73,
+          90
+        ],
+        [
+          27,
+          80,
+          93,
+          111
+        ],
+        [
+          53,
+          264,
+          73,
+          92
+        ]
+      ],
+      "pred_count": 3,
+      "elapsed_ms": 16.371999983675778,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/029.png",
+      "sha256": "32131a1718c84b935e0514946a87bfcd79d6b3c9d9d50fd39b8064dddfaed151",
+      "split": "development",
+      "condition": "dark",
+      "count": 4,
+      "prediction": [
+        [
+          32,
+          23,
+          72,
+          90
+        ],
+        [
+          371,
+          77,
+          76,
+          97
+        ],
+        [
+          79,
+          290,
+          41,
+          49
+        ],
+        [
+          375,
+          295,
+          66,
+          83
+        ]
+      ],
+      "pred_count": 4,
+      "elapsed_ms": 17.48579999548383,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/030.png",
+      "sha256": "821e5f4db038d3f20502c45e63dd9730c691362ab459f1bea34ea1072c957fe1",
+      "split": "development",
+      "condition": "dark",
+      "count": 0,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 15.622899984009564,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/031.png",
+      "sha256": "b54a4f17d68f1c8621b7af2a96411bdb364b055153e7bfbd9e41a5c2c36738cc",
+      "split": "development",
+      "condition": "dark",
+      "count": 1,
+      "prediction": [
+        [
+          50,
+          70,
+          73,
+          91
+        ]
+      ],
+      "pred_count": 1,
+      "elapsed_ms": 16.440299979876727,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/032.png",
+      "sha256": "4c95c7021ccd651d2854c3cfc684d44adce929220cd38143988848ca01da6c51",
+      "split": "development",
+      "condition": "dark",
+      "count": 2,
+      "prediction": [
+        [
+          373,
+          52,
+          77,
+          94
+        ],
+        [
+          58,
+          61,
+          69,
+          83
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 16.833600006066263,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/033.png",
+      "sha256": "f094e4052ebf206d3f35c5c3d086e566533c02082b09dc7fe897f653ac0fa799",
+      "split": "development",
+      "condition": "dark",
+      "count": 3,
+      "prediction": [
+        [
+          348,
+          47,
+          74,
+          93
+        ],
+        [
+          28,
+          50,
+          92,
+          110
+        ],
+        [
+          62,
+          325,
+          59,
+          71
+        ]
+      ],
+      "pred_count": 3,
+      "elapsed_ms": 16.034499974921346,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/034.png",
+      "sha256": "8cd29e0609a2c7d232989cf02d3adc46940e3d2d659719fab8d1bdaea6e96e01",
+      "split": "development",
+      "condition": "dark",
+      "count": 4,
+      "prediction": [
+        [
+          54,
+          46,
+          55,
+          70
+        ],
+        [
+          373,
+          72,
+          71,
+          88
+        ],
+        [
+          34,
+          287,
+          68,
+          83
+        ],
+        [
+          390,
+          323,
+          42,
+          50
+        ]
+      ],
+      "pred_count": 4,
+      "elapsed_ms": 18.09030000003986,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/035.png",
+      "sha256": "f3f707e84a8e709725997a5c7ebd4772c60e8e555409cc1cb725644cb52ed831",
+      "split": "development",
+      "condition": "dark",
+      "count": 0,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 15.990099986083806,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/036.png",
+      "sha256": "dfdcac6bf933578acf0cb63e1edc41c2e7a97bda44063caa1022419fdb9b22ad",
+      "split": "development",
+      "condition": "dark",
+      "count": 1,
+      "prediction": [
+        [
+          36,
+          74,
+          71,
+          84
+        ]
+      ],
+      "pred_count": 1,
+      "elapsed_ms": 16.024700016714633,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/037.png",
+      "sha256": "9ee77305a74f6a12c979d30b45444274dd5853aff571d1b015466f0f53e65335",
+      "split": "development",
+      "condition": "dark",
+      "count": 2,
+      "prediction": [
+        [
+          378,
+          21,
+          75,
+          94
+        ],
+        [
+          28,
+          74,
+          64,
+          77
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 18.11540001654066,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/038.png",
+      "sha256": "87a56704f6ad28f384c73778ed4f6e98024bce34b2f4266e61d9ea79897d1789",
+      "split": "development",
+      "condition": "dark",
+      "count": 3,
+      "prediction": [
+        [
+          52,
+          60,
+          55,
+          68
+        ],
+        [
+          375,
+          82,
+          67,
+          81
+        ],
+        [
+          30,
+          300,
+          85,
+          102
+        ]
+      ],
+      "pred_count": 3,
+      "elapsed_ms": 15.38799999980256,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/039.png",
+      "sha256": "7d6ec701ca56f8fd3b20e92209f1797df9bc44596e1e1719ed09ced8edb1373f",
+      "split": "development",
+      "condition": "dark",
+      "count": 4,
+      "prediction": [
+        [
+          352,
+          42,
+          67,
+          80
+        ],
+        [
+          33,
+          55,
+          70,
+          86
+        ],
+        [
+          41,
+          307,
+          81,
+          99
+        ]
+      ],
+      "pred_count": 3,
+      "elapsed_ms": 18.46839999780059,
+      "tp": 3,
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "file": "experiments/data/development/040.png",
+      "sha256": "39eb5f21f2ac6921e47300ce2b62df21d6d7a7c4fa13456a024c2b3e97c379dc",
+      "split": "development",
+      "condition": "blur",
+      "count": 0,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 15.249899995978922,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/041.png",
+      "sha256": "310a8e86748560dde3433104457ecdec0badbf0afec25d7c3e899c8592f7df4e",
+      "split": "development",
+      "condition": "blur",
+      "count": 1,
+      "prediction": [
+        [
+          67,
+          89,
+          62,
+          76
+        ]
+      ],
+      "pred_count": 1,
+      "elapsed_ms": 15.029999980470166,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/042.png",
+      "sha256": "33c81021f0f546f32892b06607829d4896b2b12a99484193234ace871dd25fc4",
+      "split": "development",
+      "condition": "blur",
+      "count": 2,
+      "prediction": [
+        [
+          357,
+          65,
+          70,
+          83
+        ],
+        [
+          61,
+          79,
+          44,
+          50
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 13.932600006228313,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/043.png",
+      "sha256": "a2fbb66cad0a132f2a549b4515e267f63fb1f06cf466f41d5ce1a40bff24867c",
+      "split": "development",
+      "condition": "blur",
+      "count": 3,
+      "prediction": [
+        [
+          102,
+          35,
+          41,
+          52
+        ],
+        [
+          387,
+          73,
+          59,
+          73
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 17.240299988770857,
+      "tp": 2,
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "file": "experiments/data/development/044.png",
+      "sha256": "9cbc5378e851e57430c8600cb4f83d08499c3c9760103007f09781751d876fb4",
+      "split": "development",
+      "condition": "blur",
+      "count": 4,
+      "prediction": [
+        [
+          386,
+          28,
+          68,
+          80
+        ],
+        [
+          31,
+          76,
+          87,
+          104
+        ],
+        [
+          386,
+          283,
+          43,
+          48
+        ],
+        [
+          39,
+          301,
+          59,
+          71
+        ]
+      ],
+      "pred_count": 4,
+      "elapsed_ms": 17.119099997216836,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/045.png",
+      "sha256": "1d0d3f58b340598ed34c22d383faf3c3433ee1de0e6990dd39e78262eb1aee2a",
+      "split": "development",
+      "condition": "blur",
+      "count": 0,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 14.172800001688302,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/046.png",
+      "sha256": "5c2543e8a79d652f228c16c0d8897ca02f81da5719d9da53b3f7d5746c893c23",
+      "split": "development",
+      "condition": "blur",
+      "count": 1,
+      "prediction": [
+        [
+          70,
+          40,
+          65,
+          79
+        ]
+      ],
+      "pred_count": 1,
+      "elapsed_ms": 14.596199995139614,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/047.png",
+      "sha256": "f11009cd8c5a9dd64bf7a3f9b4a0522003fadab521d840132c62af408271b53c",
+      "split": "development",
+      "condition": "blur",
+      "count": 2,
+      "prediction": [
+        [
+          30,
+          42,
+          93,
+          111
+        ],
+        [
+          374,
+          81,
+          67,
+          84
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 16.075999999884516,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/048.png",
+      "sha256": "e83f29dfc6827937994f6a946b6b5632cd04f9b2a9e521f03970a395a2661ca9",
+      "split": "development",
+      "condition": "blur",
+      "count": 3,
+      "prediction": [
+        [
+          349,
+          27,
+          84,
+          106
+        ],
+        [
+          71,
+          29,
+          59,
+          74
+        ],
+        [
+          29,
+          293,
+          70,
+          85
+        ]
+      ],
+      "pred_count": 3,
+      "elapsed_ms": 18.14510000986047,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/049.png",
+      "sha256": "03bd1e78d758388c9be9429d0cd9a711c9375abe6e40e121768c1a73f2bdf3cd",
+      "split": "development",
+      "condition": "blur",
+      "count": 4,
+      "prediction": [
+        [
+          63,
+          25,
+          42,
+          50
+        ],
+        [
+          352,
+          66,
+          48,
+          57
+        ],
+        [
+          381,
+          298,
+          47,
+          53
+        ],
+        [
+          32,
+          302,
+          89,
+          102
+        ]
+      ],
+      "pred_count": 4,
+      "elapsed_ms": 17.33480000984855,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/050.png",
+      "sha256": "5e995d58e6c3f28493bc86a6320428ae5d2bb47a76cfb78253a4159a83c6dbb3",
+      "split": "development",
+      "condition": "blur",
+      "count": 0,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 15.274600009433925,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/051.png",
+      "sha256": "c39ac769c65e9d20792920c448020cc50f039b736f8359bfa8bbbd930b2773e6",
+      "split": "development",
+      "condition": "blur",
+      "count": 1,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 17.461100011132658,
+      "tp": 0,
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "file": "experiments/data/development/052.png",
+      "sha256": "109a608490fb3f9182f55b0f4b899c2e163c39c1a8433cfbbeaed26920c1dbbe",
+      "split": "development",
+      "condition": "blur",
+      "count": 2,
+      "prediction": [
+        [
+          48,
+          57,
+          78,
+          96
+        ],
+        [
+          359,
+          87,
+          48,
+          57
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 16.422999993665144,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/053.png",
+      "sha256": "5ff0e4e8f54a5401017a9497de8302869982be759462bcc5938ce8996dc2e4cc",
+      "split": "development",
+      "condition": "blur",
+      "count": 3,
+      "prediction": [
+        [
+          32,
+          87,
+          51,
+          59
+        ],
+        [
+          52,
+          329,
+          77,
+          91
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 16.214300005231053,
+      "tp": 2,
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "file": "experiments/data/development/054.png",
+      "sha256": "e2490e0fdecef46d21355fdd747e0a1d51697cf1372fb521519a9f6e11236d8c",
+      "split": "development",
+      "condition": "blur",
+      "count": 4,
+      "prediction": [
+        [
+          27,
+          38,
+          93,
+          110
+        ],
+        [
+          407,
+          43,
+          42,
+          51
+        ],
+        [
+          352,
+          306,
+          61,
+          73
+        ]
+      ],
+      "pred_count": 3,
+      "elapsed_ms": 17.774099978851154,
+      "tp": 3,
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "file": "experiments/data/development/055.png",
+      "sha256": "6650402117bb93d3a55d730bad8d00376d55675ebb212de0a3429788728a5a48",
+      "split": "development",
+      "condition": "blur",
+      "count": 0,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 15.738499991130084,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/056.png",
+      "sha256": "63db2f6bbdc5aff72ae0cd8044b18ec25ab69339964b9cfb799e1f9d380ee981",
+      "split": "development",
+      "condition": "blur",
+      "count": 1,
+      "prediction": [
+        [
+          72,
+          89,
+          56,
+          67
+        ]
+      ],
+      "pred_count": 1,
+      "elapsed_ms": 16.086499992525205,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/057.png",
+      "sha256": "8fc4033bded8ee4b9e97850dd0187f4e2a2d0cd01465445f2c23b9c193c71a83",
+      "split": "development",
+      "condition": "blur",
+      "count": 2,
+      "prediction": [
+        [
+          389,
+          35,
+          67,
+          77
+        ],
+        [
+          41,
+          78,
+          78,
+          95
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 16.369099990697578,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/058.png",
+      "sha256": "07c826efb386f9e07721bdeb18d25de8c0ff2dcccd4f4c36646ebe56697977ff",
+      "split": "development",
+      "condition": "blur",
+      "count": 3,
+      "prediction": [
+        [
+          33,
+          27,
+          48,
+          56
+        ],
+        [
+          348,
+          64,
+          90,
+          106
+        ],
+        [
+          36,
+          294,
+          44,
+          52
+        ]
+      ],
+      "pred_count": 3,
+      "elapsed_ms": 16.500099998665974,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/059.png",
+      "sha256": "6aa7599d17ace06e82290b577502bf5dd358ce7ad83db5d2feb73e8a0a731d3d",
+      "split": "development",
+      "condition": "blur",
+      "count": 4,
+      "prediction": [
+        [
+          364,
+          61,
+          76,
+          94
+        ],
+        [
+          37,
+          72,
+          89,
+          106
+        ],
+        [
+          365,
+          315,
+          75,
+          90
+        ],
+        [
+          38,
+          337,
+          85,
+          105
+        ]
+      ],
+      "pred_count": 4,
+      "elapsed_ms": 16.6771000076551,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/060.png",
+      "sha256": "cada1a88e67f05ae78ccd00eec2b1209b9ef6b170b6595d9c310fed13a160a0e",
+      "split": "development",
+      "condition": "dark_blur",
+      "count": 0,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 17.744599987054244,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/061.png",
+      "sha256": "64921c9e955cd211ac6e48f1706cd5bd4f702e7caf8a2cd1b2d9879bc14e8ef4",
+      "split": "development",
+      "condition": "dark_blur",
+      "count": 1,
+      "prediction": [
+        [
+          36,
+          30,
+          77,
+          97
+        ]
+      ],
+      "pred_count": 1,
+      "elapsed_ms": 17.150100000435486,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/062.png",
+      "sha256": "14c0e329ec20f3c9166401c7d79c24c672a1dd8972604564f677f50b427ddc41",
+      "split": "development",
+      "condition": "dark_blur",
+      "count": 2,
+      "prediction": [
+        [
+          369,
+          77,
+          73,
+          90
+        ]
+      ],
+      "pred_count": 1,
+      "elapsed_ms": 16.63120000739582,
+      "tp": 1,
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "file": "experiments/data/development/063.png",
+      "sha256": "7052568c6d466949d04b5900ee3260e728b17726a67832f272e386de5c307360",
+      "split": "development",
+      "condition": "dark_blur",
+      "count": 3,
+      "prediction": [
+        [
+          78,
+          34,
+          50,
+          62
+        ],
+        [
+          344,
+          80,
+          50,
+          60
+        ],
+        [
+          81,
+          296,
+          49,
+          58
+        ]
+      ],
+      "pred_count": 3,
+      "elapsed_ms": 16.60269999410957,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/064.png",
+      "sha256": "40ac8afdc89043b4667fa2a193ebfcbfa1acb421d91d2ed4e4ebabdf0eb569e6",
+      "split": "development",
+      "condition": "dark_blur",
+      "count": 4,
+      "prediction": [
+        [
+          359,
+          19,
+          72,
+          88
+        ],
+        [
+          30,
+          55,
+          87,
+          103
+        ],
+        [
+          33,
+          285,
+          93,
+          109
+        ],
+        [
+          350,
+          301,
+          84,
+          102
+        ]
+      ],
+      "pred_count": 4,
+      "elapsed_ms": 17.589099996257573,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/065.png",
+      "sha256": "302142556ce750db344f445176625df099106bb7fd59d33f4961e059bae863c7",
+      "split": "development",
+      "condition": "dark_blur",
+      "count": 0,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 16.23859998653643,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/066.png",
+      "sha256": "fc2142892633a476b2f8d1b0fca22ae4549afeb9783f8b51c268914fbd67e411",
+      "split": "development",
+      "condition": "dark_blur",
+      "count": 1,
+      "prediction": [
+        [
+          54,
+          21,
+          74,
+          92
+        ]
+      ],
+      "pred_count": 1,
+      "elapsed_ms": 15.262400003848597,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/067.png",
+      "sha256": "4677268ffa00cdba9a45aeac1755ed6726729b37e91c5fef6b71557b2aa71818",
+      "split": "development",
+      "condition": "dark_blur",
+      "count": 2,
+      "prediction": [
+        [
+          44,
+          29,
+          63,
+          75
+        ],
+        [
+          353,
+          62,
+          79,
+          99
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 16.4840999932494,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/068.png",
+      "sha256": "11da52d72da92fa95c5a964d327d4dfef9ba06469f24766579f89bac312c5edf",
+      "split": "development",
+      "condition": "dark_blur",
+      "count": 3,
+      "prediction": [
+        [
+          39,
+          54,
+          59,
+          74
+        ],
+        [
+          382,
+          73,
+          57,
+          72
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 16.6855999850668,
+      "tp": 2,
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "file": "experiments/data/development/069.png",
+      "sha256": "8e9d564bcf4e946deaea134cbe0b02fbe0cdc593625a21f4704ea9a9a1db4c53",
+      "split": "development",
+      "condition": "dark_blur",
+      "count": 4,
+      "prediction": [
+        [
+          357,
+          67,
+          67,
+          83
+        ],
+        [
+          38,
+          86,
+          82,
+          98
+        ],
+        [
+          356,
+          283,
+          78,
+          95
+        ],
+        [
+          39,
+          291,
+          61,
+          73
+        ]
+      ],
+      "pred_count": 4,
+      "elapsed_ms": 16.63110000663437,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/070.png",
+      "sha256": "ab86e8f040fd0be1bb280386373e799cca00624959e40113da16d998f5aceeba",
+      "split": "development",
+      "condition": "dark_blur",
+      "count": 0,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 17.418200004613027,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/071.png",
+      "sha256": "f69db585d35b69e00fcf7ffa915df5f822f63c4960f72afeb175cbe41ab33deb",
+      "split": "development",
+      "condition": "dark_blur",
+      "count": 1,
+      "prediction": [
+        [
+          29,
+          59,
+          93,
+          111
+        ]
+      ],
+      "pred_count": 1,
+      "elapsed_ms": 16.342899994924664,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/072.png",
+      "sha256": "e551d57b5611946819926754ec134d907ee1a41118551336a37e861e4f1b91dc",
+      "split": "development",
+      "condition": "dark_blur",
+      "count": 2,
+      "prediction": [
+        [
+          353,
+          63,
+          82,
+          103
+        ],
+        [
+          27,
+          88,
+          56,
+          69
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 17.206200020154938,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/073.png",
+      "sha256": "ce12f167ffbb993c7f555c29ae92f971eefa80dc8e929e6d3864611aa7c15f7e",
+      "split": "development",
+      "condition": "dark_blur",
+      "count": 3,
+      "prediction": [
+        [
+          48,
+          34,
+          56,
+          67
+        ],
+        [
+          364,
+          48,
+          48,
+          55
+        ],
+        [
+          63,
+          291,
+          55,
+          66
+        ]
+      ],
+      "pred_count": 3,
+      "elapsed_ms": 16.427599999587983,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/074.png",
+      "sha256": "ce2c21c00dbfd390773766bdbda22aefba19543ab87975b5c5bb854d7dd5f4a9",
+      "split": "development",
+      "condition": "dark_blur",
+      "count": 4,
+      "prediction": [
+        [
+          369,
+          88,
+          64,
+          79
+        ],
+        [
+          344,
+          279,
+          56,
+          67
+        ],
+        [
+          36,
+          313,
+          77,
+          93
+        ]
+      ],
+      "pred_count": 3,
+      "elapsed_ms": 17.20599998952821,
+      "tp": 3,
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "file": "experiments/data/development/075.png",
+      "sha256": "3821a90db64aca89018145aa6b46c01719a7a291e506c6b4a9a744527dbee462",
+      "split": "development",
+      "condition": "dark_blur",
+      "count": 0,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 15.914200019324198,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/076.png",
+      "sha256": "8fadd772e0f8a3cc8eafb39facf7956a21820b9c2250c50c6e84cb04f407b48e",
+      "split": "development",
+      "condition": "dark_blur",
+      "count": 1,
+      "prediction": [
+        [
+          43,
+          37,
+          62,
+          75
+        ]
+      ],
+      "pred_count": 1,
+      "elapsed_ms": 15.763300005346537,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/077.png",
+      "sha256": "ea77cfd7de646b252b07eb53e967eb2e2e65e891ad801539640c4512eb2ca811",
+      "split": "development",
+      "condition": "dark_blur",
+      "count": 2,
+      "prediction": [
+        [
+          393,
+          44,
+          61,
+          76
+        ]
+      ],
+      "pred_count": 1,
+      "elapsed_ms": 16.25780001631938,
+      "tp": 1,
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "file": "experiments/data/development/078.png",
+      "sha256": "755c2c396933008e7707dc5181ae57e6d7e2d44a7356dad14984caf60efb4ba0",
+      "split": "development",
+      "condition": "dark_blur",
+      "count": 3,
+      "prediction": [
+        [
+          393,
+          54,
+          62,
+          77
+        ],
+        [
+          36,
+          62,
+          80,
+          98
+        ],
+        [
+          28,
+          286,
+          84,
+          103
+        ]
+      ],
+      "pred_count": 3,
+      "elapsed_ms": 16.329899983247742,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/development/079.png",
+      "sha256": "ffac19238cbe144ec85da8569d4a1b01ceee6bf3e138df38ab5a5637541a1633",
+      "split": "development",
+      "condition": "dark_blur",
+      "count": 4,
+      "prediction": [
+        [
+          30,
+          75,
+          62,
+          75
+        ],
+        [
+          384,
+          90,
+          59,
+          73
+        ],
+        [
+          380,
+          297,
+          61,
+          74
+        ],
+        [
+          32,
+          336,
+          75,
+          90
+        ]
+      ],
+      "pred_count": 4,
+      "elapsed_ms": 17.07550001447089,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/000.png",
+      "sha256": "a73d36d02a20e439ef9010a09bdea471dca286fcc1d180d6b49a4e01c5b3b9e7",
+      "split": "test",
+      "condition": "clean",
+      "count": 0,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 15.795199986314401,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/001.png",
+      "sha256": "ba91f59b79c23866e6bfc6162cd0de78bca612b31434ad4c7737d22fe6fa9377",
+      "split": "test",
+      "condition": "clean",
+      "count": 1,
+      "prediction": [
+        [
+          38,
+          44,
+          66,
+          80
+        ]
+      ],
+      "pred_count": 1,
+      "elapsed_ms": 16.72889999463223,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/002.png",
+      "sha256": "9434da34a8c1c89e2c8f46e01d8e7e65548d38c8742d5f57faae0f41e45f1d05",
+      "split": "test",
+      "condition": "clean",
+      "count": 2,
+      "prediction": [
+        [
+          40,
+          35,
+          68,
+          79
+        ],
+        [
+          355,
+          43,
+          51,
+          61
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 16.60859998082742,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/003.png",
+      "sha256": "8b7ef56832c15688298ec6303c56265902c4f8237aa3c5c7982688b777f9ec2f",
+      "split": "test",
+      "condition": "clean",
+      "count": 3,
+      "prediction": [
+        [
+          339,
+          41,
+          46,
+          55
+        ],
+        [
+          41,
+          49,
+          58,
+          69
+        ],
+        [
+          42,
+          309,
+          71,
+          84
+        ]
+      ],
+      "pred_count": 3,
+      "elapsed_ms": 17.19419998698868,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/004.png",
+      "sha256": "30b48d96877240ff7467aa6a3e7655be727069e143c882f6b0d21e8591706db7",
+      "split": "test",
+      "condition": "clean",
+      "count": 4,
+      "prediction": [
+        [
+          50,
+          44,
+          46,
+          56
+        ],
+        [
+          349,
+          56,
+          100,
+          116
+        ],
+        [
+          349,
+          311,
+          88,
+          105
+        ],
+        [
+          84,
+          323,
+          45,
+          55
+        ]
+      ],
+      "pred_count": 4,
+      "elapsed_ms": 21.030899981269613,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/005.png",
+      "sha256": "aacee6ad912cad9af345bcb5747640e04493f79f8ee6041306c5df05894806e3",
+      "split": "test",
+      "condition": "clean",
+      "count": 0,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 14.689100004034117,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/006.png",
+      "sha256": "d6fcd6702c1bacd298a7d3c52c288cd7fa8a2c441910fea703acb1d56fdf3fc6",
+      "split": "test",
+      "condition": "clean",
+      "count": 1,
+      "prediction": [
+        [
+          30,
+          69,
+          92,
+          111
+        ]
+      ],
+      "pred_count": 1,
+      "elapsed_ms": 14.5984000118915,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/007.png",
+      "sha256": "ce50a0332ff3f423a31625768ac512d5b3870709292448f4870531dd8ed93b78",
+      "split": "test",
+      "condition": "clean",
+      "count": 2,
+      "prediction": [
+        [
+          401,
+          61,
+          43,
+          52
+        ],
+        [
+          63,
+          78,
+          60,
+          71
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 17.133599991211668,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/008.png",
+      "sha256": "0ff0104c39fcd8fc3df23b88935f74d2878be2946a3252b6175578d89010cf67",
+      "split": "test",
+      "condition": "clean",
+      "count": 3,
+      "prediction": [
+        [
+          87,
+          79,
+          53,
+          65
+        ],
+        [
+          345,
+          88,
+          67,
+          81
+        ],
+        [
+          75,
+          269,
+          45,
+          53
+        ]
+      ],
+      "pred_count": 3,
+      "elapsed_ms": 16.570900013903156,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/009.png",
+      "sha256": "7ace139b5c0d74aac5307afbcf1f032a0dece5291cc8789e4e0822644d950430",
+      "split": "test",
+      "condition": "clean",
+      "count": 4,
+      "prediction": [
+        [
+          354,
+          42,
+          88,
+          108
+        ],
+        [
+          94,
+          57,
+          47,
+          57
+        ],
+        [
+          353,
+          298,
+          75,
+          90
+        ],
+        [
+          57,
+          310,
+          62,
+          76
+        ]
+      ],
+      "pred_count": 4,
+      "elapsed_ms": 17.269099975237623,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/010.png",
+      "sha256": "cc6408fd08c25477c556c5b58463b5bef1824b5361ab2bc699e35e37ac4f4e80",
+      "split": "test",
+      "condition": "clean",
+      "count": 0,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 15.256799990311265,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/011.png",
+      "sha256": "a18ba6801f0d4744743e79811a8ae3d5b5a14b7d915e369da44a21b426d33c91",
+      "split": "test",
+      "condition": "clean",
+      "count": 1,
+      "prediction": [
+        [
+          58,
+          56,
+          66,
+          78
+        ]
+      ],
+      "pred_count": 1,
+      "elapsed_ms": 16.563299985136837,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/012.png",
+      "sha256": "81fe916af0791e3ca2f4f34d0ab4c23ca39cb1f4b7744dfd0fb80391964ba22a",
+      "split": "test",
+      "condition": "clean",
+      "count": 2,
+      "prediction": [
+        [
+          44,
+          52,
+          73,
+          92
+        ],
+        [
+          371,
+          54,
+          40,
+          48
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 17.747800011420622,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/013.png",
+      "sha256": "2d1ca05946d00f7850b68f8dc70989d45b78ce8433b8a892a21e037fe7f9ce9f",
+      "split": "test",
+      "condition": "clean",
+      "count": 3,
+      "prediction": [
+        [
+          358,
+          20,
+          65,
+          79
+        ],
+        [
+          41,
+          23,
+          75,
+          93
+        ],
+        [
+          44,
+          302,
+          65,
+          79
+        ]
+      ],
+      "pred_count": 3,
+      "elapsed_ms": 15.791799989528954,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/014.png",
+      "sha256": "ab613d3cff19b07a066170ed25cc9f1db7c7faa39b3fed4b6efc1d4c72781018",
+      "split": "test",
+      "condition": "clean",
+      "count": 4,
+      "prediction": [
+        [
+          35,
+          27,
+          48,
+          60
+        ],
+        [
+          352,
+          92,
+          75,
+          92
+        ],
+        [
+          405,
+          272,
+          45,
+          57
+        ],
+        [
+          28,
+          287,
+          93,
+          108
+        ]
+      ],
+      "pred_count": 4,
+      "elapsed_ms": 17.835900012869388,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/015.png",
+      "sha256": "d9379205ceba9d73e4220aa0a3b34c4be8d684d08c4e0776f9b4664ee16c58aa",
+      "split": "test",
+      "condition": "clean",
+      "count": 0,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 15.91389998793602,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/016.png",
+      "sha256": "bb222128e9a2e2a54035685ed81d8b5ee299bdd3627238570353121f3ed1a622",
+      "split": "test",
+      "condition": "clean",
+      "count": 1,
+      "prediction": [
+        [
+          27,
+          78,
+          96,
+          109
+        ]
+      ],
+      "pred_count": 1,
+      "elapsed_ms": 17.390499997418374,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/017.png",
+      "sha256": "8d053b4f7fa4db0f1e63d0ee3109a27efba8674a110bc90a0fd64fe232ae2cc7",
+      "split": "test",
+      "condition": "clean",
+      "count": 2,
+      "prediction": [
+        [
+          384,
+          30,
+          69,
+          86
+        ],
+        [
+          51,
+          74,
+          78,
+          94
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 17.6072999893222,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/018.png",
+      "sha256": "4a64e86f1525ced530065847591e60e13e3bc82545cd8cbbdd454a4bbb080a48",
+      "split": "test",
+      "condition": "clean",
+      "count": 3,
+      "prediction": [
+        [
+          354,
+          52,
+          65,
+          79
+        ],
+        [
+          32,
+          59,
+          81,
+          99
+        ],
+        [
+          46,
+          313,
+          77,
+          91
+        ]
+      ],
+      "pred_count": 3,
+      "elapsed_ms": 16.499699995620176,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/019.png",
+      "sha256": "135bb2abeeeef6bd57c1c5c73ca246a8c3f7b64d3ffc0983c0789f5c2e85eb5c",
+      "split": "test",
+      "condition": "clean",
+      "count": 4,
+      "prediction": [
+        [
+          356,
+          54,
+          59,
+          71
+        ],
+        [
+          55,
+          65,
+          64,
+          79
+        ],
+        [
+          62,
+          265,
+          60,
+          72
+        ],
+        [
+          346,
+          273,
+          49,
+          58
+        ]
+      ],
+      "pred_count": 4,
+      "elapsed_ms": 18.04900000570342,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/020.png",
+      "sha256": "c949e3ddbb8903a4050841fcdeba82e56858222800c30cdc964d378f5f7be9e6",
+      "split": "test",
+      "condition": "dark",
+      "count": 0,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 14.862200012430549,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/021.png",
+      "sha256": "fc3356ae39f4395f73ac3e4c25adb9a8b16edb48a0b0320cb8074375e0ec6d1b",
+      "split": "test",
+      "condition": "dark",
+      "count": 1,
+      "prediction": [
+        [
+          52,
+          82,
+          68,
+          82
+        ]
+      ],
+      "pred_count": 1,
+      "elapsed_ms": 15.510500001255423,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/022.png",
+      "sha256": "50c5d40dd589475cd1e1fc40df6b0275a847b649d8b0283bf9798b786a06b2e7",
+      "split": "test",
+      "condition": "dark",
+      "count": 2,
+      "prediction": [
+        [
+          34,
+          43,
+          68,
+          83
+        ],
+        [
+          365,
+          75,
+          74,
+          90
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 16.492399998242036,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/023.png",
+      "sha256": "e2627e77dd8d3762be3c482fce651f82230d3dca8276df819bf69eeeb385730d",
+      "split": "test",
+      "condition": "dark",
+      "count": 3,
+      "prediction": [
+        [
+          71,
+          70,
+          66,
+          82
+        ],
+        [
+          352,
+          77,
+          91,
+          112
+        ],
+        [
+          55,
+          266,
+          49,
+          64
+        ]
+      ],
+      "pred_count": 3,
+      "elapsed_ms": 15.398899995489046,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/024.png",
+      "sha256": "4ad2c8f20ab316b30c18c695b110b61e3288f67396c22e4e6a0b056bc7666009",
+      "split": "test",
+      "condition": "dark",
+      "count": 4,
+      "prediction": [
+        [
+          62,
+          29,
+          60,
+          73
+        ],
+        [
+          405,
+          64,
+          40,
+          49
+        ],
+        [
+          76,
+          265,
+          63,
+          76
+        ],
+        [
+          391,
+          291,
+          49,
+          57
+        ]
+      ],
+      "pred_count": 4,
+      "elapsed_ms": 17.112100002123043,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/025.png",
+      "sha256": "4448608c73dd6896d0d25963425986007d8a78d8c250846fef89febc14bfc19a",
+      "split": "test",
+      "condition": "dark",
+      "count": 0,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 16.35990000795573,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/026.png",
+      "sha256": "178b5a4a29768dbc3dc81b580eba4a6f3ae744504b364e01db5993e5c10e11a7",
+      "split": "test",
+      "condition": "dark",
+      "count": 1,
+      "prediction": [
+        [
+          32,
+          27,
+          53,
+          65
+        ]
+      ],
+      "pred_count": 1,
+      "elapsed_ms": 16.224099992541596,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/027.png",
+      "sha256": "c98e0188e13918cecd806a2f99233ce66866a8c000649ca2340d761314d4df36",
+      "split": "test",
+      "condition": "dark",
+      "count": 2,
+      "prediction": [
+        [
+          360,
+          35,
+          89,
+          109
+        ],
+        [
+          30,
+          79,
+          89,
+          109
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 16.442200023448095,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/028.png",
+      "sha256": "14e54bf550c8a8cfec9cb4910bb45bf9abcefe08362256130df1fd357a9ed802",
+      "split": "test",
+      "condition": "dark",
+      "count": 3,
+      "prediction": [
+        [
+          40,
+          39,
+          89,
+          110
+        ],
+        [
+          353,
+          60,
+          87,
+          107
+        ],
+        [
+          54,
+          322,
+          63,
+          76
+        ]
+      ],
+      "pred_count": 3,
+      "elapsed_ms": 17.58079999126494,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/029.png",
+      "sha256": "dfddae9898f31dbf65db471180ca3826836ad699e3a022995d6648f88bceb01c",
+      "split": "test",
+      "condition": "dark",
+      "count": 4,
+      "prediction": [
+        [
+          49,
+          44,
+          76,
+          96
+        ],
+        [
+          348,
+          82,
+          71,
+          89
+        ],
+        [
+          358,
+          278,
+          88,
+          108
+        ],
+        [
+          56,
+          316,
+          47,
+          56
+        ]
+      ],
+      "pred_count": 4,
+      "elapsed_ms": 17.09190002293326,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/030.png",
+      "sha256": "63fca4b74a663ec36a23fd245215f0c2ddf0f3264e50128ca14ebe328e3d498f",
+      "split": "test",
+      "condition": "dark",
+      "count": 0,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 14.733699994394556,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/031.png",
+      "sha256": "c2f5087bf4cf78070a1c34010d7db7b8c405361bb7ea4e1d391db0c558f88a09",
+      "split": "test",
+      "condition": "dark",
+      "count": 1,
+      "prediction": [
+        [
+          38,
+          76,
+          60,
+          74
+        ]
+      ],
+      "pred_count": 1,
+      "elapsed_ms": 15.495500003453344,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/032.png",
+      "sha256": "37423d08599d91a05a009f09a704c7e9dbf5c684867fe609325bc98a44926009",
+      "split": "test",
+      "condition": "dark",
+      "count": 2,
+      "prediction": [
+        [
+          362,
+          36,
+          54,
+          66
+        ],
+        [
+          32,
+          42,
+          76,
+          95
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 16.8728000135161,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/033.png",
+      "sha256": "3a927f72f59bec76d8143a98cdff9b87b8b3acb2193d412a00f6adab5b95ed48",
+      "split": "test",
+      "condition": "dark",
+      "count": 3,
+      "prediction": [
+        [
+          50,
+          20,
+          62,
+          75
+        ],
+        [
+          372,
+          54,
+          77,
+          95
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 16.79700001841411,
+      "tp": 2,
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "file": "experiments/data/test/034.png",
+      "sha256": "0df8a58df135186793daf285a67c6ed95e63f63c4a1ee128f227eed7fa8f7942",
+      "split": "test",
+      "condition": "dark",
+      "count": 4,
+      "prediction": [
+        [
+          50,
+          26,
+          57,
+          72
+        ],
+        [
+          370,
+          77,
+          51,
+          62
+        ],
+        [
+          49,
+          266,
+          58,
+          72
+        ],
+        [
+          392,
+          288,
+          63,
+          76
+        ]
+      ],
+      "pred_count": 4,
+      "elapsed_ms": 16.099800006486475,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/035.png",
+      "sha256": "2d485597801d77cb137e66fbdda2c4e22238b6dda0ef38fa02c4bd4b0e6ced0a",
+      "split": "test",
+      "condition": "dark",
+      "count": 0,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 15.902299986919388,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/036.png",
+      "sha256": "c0ec8e1b33a93fed2e96f00cc32aa2c998a12948151cbcf7f6220560e547b161",
+      "split": "test",
+      "condition": "dark",
+      "count": 1,
+      "prediction": [
+        [
+          37,
+          58,
+          81,
+          101
+        ]
+      ],
+      "pred_count": 1,
+      "elapsed_ms": 15.574799996102229,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/037.png",
+      "sha256": "620784f6d5f9ac1a04c3dac5651fced5ecb72edc72084de7eca066ce3fbad23c",
+      "split": "test",
+      "condition": "dark",
+      "count": 2,
+      "prediction": [
+        [
+          372,
+          24,
+          70,
+          89
+        ],
+        [
+          29,
+          57,
+          78,
+          94
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 16.229899978497997,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/038.png",
+      "sha256": "a1aae0d64694e8bb21a74e791e08031808675204541e501fa26f045d202d30f4",
+      "split": "test",
+      "condition": "dark",
+      "count": 3,
+      "prediction": [
+        [
+          28,
+          32,
+          82,
+          100
+        ],
+        [
+          346,
+          65,
+          54,
+          66
+        ],
+        [
+          29,
+          293,
+          72,
+          89
+        ]
+      ],
+      "pred_count": 3,
+      "elapsed_ms": 15.618500008713454,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/039.png",
+      "sha256": "afdf549b469c9b76af91e303debc81d390935afefd9c09aa6e6006ec52fb84b1",
+      "split": "test",
+      "condition": "dark",
+      "count": 4,
+      "prediction": [
+        [
+          88,
+          19,
+          47,
+          56
+        ],
+        [
+          356,
+          24,
+          80,
+          100
+        ],
+        [
+          347,
+          288,
+          94,
+          113
+        ],
+        [
+          51,
+          303,
+          62,
+          75
+        ]
+      ],
+      "pred_count": 4,
+      "elapsed_ms": 17.95849998597987,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/040.png",
+      "sha256": "e4ffca3301f76866ea66506ed291b5b12efe435b06a25ba56dc9222b551d88d7",
+      "split": "test",
+      "condition": "blur",
+      "count": 0,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 14.893900020979345,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/041.png",
+      "sha256": "90fbb371674e034dca1948de81a7dca7a69ba8181c60a1dc54bf1709aab4ec66",
+      "split": "test",
+      "condition": "blur",
+      "count": 1,
+      "prediction": [
+        [
+          58,
+          54,
+          64,
+          77
+        ]
+      ],
+      "pred_count": 1,
+      "elapsed_ms": 17.168099991977215,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/042.png",
+      "sha256": "e757ba605e5c442899d77ee54fa0a4508ba53aaefb1a5190a8447e08f58473b6",
+      "split": "test",
+      "condition": "blur",
+      "count": 2,
+      "prediction": [
+        [
+          373,
+          49,
+          74,
+          87
+        ],
+        [
+          40,
+          59,
+          53,
+          64
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 16.628399986075237,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/043.png",
+      "sha256": "e7d89e976c270e6ad590c94bbfb9ed52a1a62f2a7e64ae7bd84aacad18796ca5",
+      "split": "test",
+      "condition": "blur",
+      "count": 3,
+      "prediction": [
+        [
+          95,
+          28,
+          46,
+          52
+        ],
+        [
+          359,
+          85,
+          88,
+          109
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 17.356299998937175,
+      "tp": 2,
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "file": "experiments/data/test/044.png",
+      "sha256": "04755349745147098a644580b6c3a5c753f75f9dc9f660a6bf5671ac8cf3b6ae",
+      "split": "test",
+      "condition": "blur",
+      "count": 4,
+      "prediction": [
+        [
+          353,
+          39,
+          65,
+          79
+        ],
+        [
+          40,
+          84,
+          82,
+          104
+        ],
+        [
+          390,
+          287,
+          59,
+          71
+        ],
+        [
+          26,
+          325,
+          64,
+          76
+        ]
+      ],
+      "pred_count": 4,
+      "elapsed_ms": 19.043500011321157,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/045.png",
+      "sha256": "595077c91b1e470282bdb5b2395926fa6b95f4313a3a4480c729078d9d6bce02",
+      "split": "test",
+      "condition": "blur",
+      "count": 0,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 14.786800020374358,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/046.png",
+      "sha256": "597912a97a8d581c3ab8f7aef16be63972b732292812ef48ec9f5f37c73cdb0b",
+      "split": "test",
+      "condition": "blur",
+      "count": 1,
+      "prediction": [
+        [
+          41,
+          82,
+          54,
+          65
+        ]
+      ],
+      "pred_count": 1,
+      "elapsed_ms": 16.357500018784776,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/047.png",
+      "sha256": "a9b9b5987acb4a6da2dd0a5de6d47319dc35837fcf3f6db9bec54b73b2027ac1",
+      "split": "test",
+      "condition": "blur",
+      "count": 2,
+      "prediction": [
+        [
+          360,
+          31,
+          45,
+          54
+        ],
+        [
+          45,
+          65,
+          78,
+          101
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 15.273099998012185,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/048.png",
+      "sha256": "8fe8e31addfbdd253fe24ff5e16a5eddc5eb9244112fcb5dec93c5db84c22fd2",
+      "split": "test",
+      "condition": "blur",
+      "count": 3,
+      "prediction": [
+        [
+          37,
+          62,
+          54,
+          66
+        ],
+        [
+          347,
+          71,
+          56,
+          65
+        ],
+        [
+          30,
+          270,
+          88,
+          105
+        ]
+      ],
+      "pred_count": 3,
+      "elapsed_ms": 19.132800021907315,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/049.png",
+      "sha256": "7ffd17c074f2527be69d9dffe1370d871af0078cd733cbe0ac4a159e3100d6a3",
+      "split": "test",
+      "condition": "blur",
+      "count": 4,
+      "prediction": [
+        [
+          33,
+          73,
+          83,
+          100
+        ],
+        [
+          368,
+          76,
+          53,
+          64
+        ],
+        [
+          60,
+          280,
+          55,
+          66
+        ],
+        [
+          387,
+          332,
+          68,
+          79
+        ]
+      ],
+      "pred_count": 4,
+      "elapsed_ms": 16.61750001949258,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/050.png",
+      "sha256": "783a1c8d189c26909089029a640ba0cc3966fc622b45929af86f0f983e4376eb",
+      "split": "test",
+      "condition": "blur",
+      "count": 0,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 16.91690000006929,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/051.png",
+      "sha256": "f96f36612642a392b8807165a95aa5da2e9335c909048eaf427f768c6ef7d4b5",
+      "split": "test",
+      "condition": "blur",
+      "count": 1,
+      "prediction": [
+        [
+          45,
+          63,
+          52,
+          61
+        ]
+      ],
+      "pred_count": 1,
+      "elapsed_ms": 15.546200011158362,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/052.png",
+      "sha256": "bccd967f4a60b4307036fdf4534db24b215ded2f879a9f81725a82b12aa131be",
+      "split": "test",
+      "condition": "blur",
+      "count": 2,
+      "prediction": [
+        [
+          389,
+          28,
+          65,
+          82
+        ],
+        [
+          31,
+          68,
+          80,
+          96
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 17.857999977422878,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/053.png",
+      "sha256": "cb814059d43d57dad46182c6e51e3645938ab0dde556e70f43d8f8668d5020a6",
+      "split": "test",
+      "condition": "blur",
+      "count": 3,
+      "prediction": [
+        [
+          344,
+          31,
+          45,
+          54
+        ],
+        [
+          66,
+          43,
+          61,
+          74
+        ],
+        [
+          54,
+          267,
+          50,
+          59
+        ]
+      ],
+      "pred_count": 3,
+      "elapsed_ms": 16.839099989738315,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/054.png",
+      "sha256": "8f858d45caf414c5b9f31568c0fb6fd6831cf45129d91c9216eec21655c9ea56",
+      "split": "test",
+      "condition": "blur",
+      "count": 4,
+      "prediction": [
+        [
+          79,
+          48,
+          39,
+          47
+        ],
+        [
+          378,
+          74,
+          60,
+          72
+        ],
+        [
+          40,
+          287,
+          77,
+          98
+        ],
+        [
+          356,
+          315,
+          73,
+          87
+        ]
+      ],
+      "pred_count": 4,
+      "elapsed_ms": 15.79530001617968,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/055.png",
+      "sha256": "6e0e9c7c78989bce903ec450ea3cd0e7c6aeda43bcd58e2c8659098212db0fa3",
+      "split": "test",
+      "condition": "blur",
+      "count": 0,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 16.584600001806393,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/056.png",
+      "sha256": "fa45e94ca0c5857d00e4bbc82a91bbd19622de37b28ff83f0ce4ed4911249891",
+      "split": "test",
+      "condition": "blur",
+      "count": 1,
+      "prediction": [
+        [
+          42,
+          81,
+          47,
+          57
+        ]
+      ],
+      "pred_count": 1,
+      "elapsed_ms": 14.59980002255179,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/057.png",
+      "sha256": "b8ce8502d9322dca5b0b32da79b17db7c266a1e0eed171c9324ce5cd26d7aa34",
+      "split": "test",
+      "condition": "blur",
+      "count": 2,
+      "prediction": [
+        [
+          69,
+          84,
+          60,
+          73
+        ]
+      ],
+      "pred_count": 1,
+      "elapsed_ms": 16.99699999880977,
+      "tp": 1,
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "file": "experiments/data/test/058.png",
+      "sha256": "6ee38a43d1417ab00e99412197550e0c5718353df5bcf9ee1f070bb552c42240",
+      "split": "test",
+      "condition": "blur",
+      "count": 3,
+      "prediction": [
+        [
+          371,
+          73,
+          59,
+          73
+        ],
+        [
+          32,
+          81,
+          67,
+          80
+        ],
+        [
+          49,
+          317,
+          48,
+          56
+        ]
+      ],
+      "pred_count": 3,
+      "elapsed_ms": 17.001000000163913,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/059.png",
+      "sha256": "412e59db84e65903ad4732b637082d1e44e8cd54bfadc3cf6fd4c220fc2f8ebb",
+      "split": "test",
+      "condition": "blur",
+      "count": 4,
+      "prediction": [
+        [
+          39,
+          39,
+          62,
+          74
+        ],
+        [
+          401,
+          77,
+          50,
+          60
+        ],
+        [
+          44,
+          278,
+          55,
+          63
+        ],
+        [
+          383,
+          316,
+          55,
+          64
+        ]
+      ],
+      "pred_count": 4,
+      "elapsed_ms": 16.489200002979487,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/060.png",
+      "sha256": "650309d1236718a5de80ae1aa1edfd30f623019d83e1210ff809a096f5e7af21",
+      "split": "test",
+      "condition": "dark_blur",
+      "count": 0,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 17.742500000167638,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/061.png",
+      "sha256": "4cad45a90f2acf256ed3be041454c29a9665cb616088fec85a79456f545d866c",
+      "split": "test",
+      "condition": "dark_blur",
+      "count": 1,
+      "prediction": [
+        [
+          44,
+          36,
+          79,
+          98
+        ]
+      ],
+      "pred_count": 1,
+      "elapsed_ms": 17.756300017936155,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/062.png",
+      "sha256": "408b504d51b8b7348db68c4d8124bcdc860b867de223fcfa037f0e42cc1adc0e",
+      "split": "test",
+      "condition": "dark_blur",
+      "count": 2,
+      "prediction": [
+        [
+          356,
+          74,
+          79,
+          96
+        ],
+        [
+          65,
+          76,
+          49,
+          59
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 16.295700013870373,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/063.png",
+      "sha256": "a0a7f7e64bea850751a3ed86f18860bee0e1930255a4c90b53c9004ac79335b0",
+      "split": "test",
+      "condition": "dark_blur",
+      "count": 3,
+      "prediction": [
+        [
+          351,
+          58,
+          56,
+          70
+        ],
+        [
+          64,
+          297,
+          70,
+          83
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 17.148899991298094,
+      "tp": 2,
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "file": "experiments/data/test/064.png",
+      "sha256": "1bfb4455dd637a011c130214850627d19aa4bc873c66e1769159e8e27c29f0f3",
+      "split": "test",
+      "condition": "dark_blur",
+      "count": 4,
+      "prediction": [
+        [
+          367,
+          48,
+          56,
+          69
+        ],
+        [
+          32,
+          53,
+          72,
+          87
+        ],
+        [
+          26,
+          318,
+          63,
+          75
+        ]
+      ],
+      "pred_count": 3,
+      "elapsed_ms": 18.2624000008218,
+      "tp": 3,
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "file": "experiments/data/test/065.png",
+      "sha256": "246b0afb525ac8c789efa2a2e05cbc127082401d00cbe04f23afd546cc790fa9",
+      "split": "test",
+      "condition": "dark_blur",
+      "count": 0,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 15.697800001362339,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/066.png",
+      "sha256": "6ed3c4bc358f115e230ccf97df3b43f297c87919365d862557d9c826e3b9579d",
+      "split": "test",
+      "condition": "dark_blur",
+      "count": 1,
+      "prediction": [
+        [
+          30,
+          26,
+          88,
+          109
+        ]
+      ],
+      "pred_count": 1,
+      "elapsed_ms": 17.154300003312528,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/067.png",
+      "sha256": "4c7c859b61e1703320ec5918735d293708398d95c2caed8957c398cdfc267097",
+      "split": "test",
+      "condition": "dark_blur",
+      "count": 2,
+      "prediction": [
+        [
+          361,
+          32,
+          49,
+          58
+        ],
+        [
+          31,
+          78,
+          90,
+          109
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 19.273499987320974,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/068.png",
+      "sha256": "43dbca8323dc24df77de8ca5ef7c283a1244b27000e8408a269cc5b944f7f227",
+      "split": "test",
+      "condition": "dark_blur",
+      "count": 3,
+      "prediction": [
+        [
+          51,
+          45,
+          78,
+          98
+        ],
+        [
+          355,
+          57,
+          62,
+          76
+        ],
+        [
+          38,
+          288,
+          66,
+          81
+        ]
+      ],
+      "pred_count": 3,
+      "elapsed_ms": 16.705600020941347,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/069.png",
+      "sha256": "2728e34bf78f13cc6d30761cbe716365c55110a9b36417c3399100fdc0c69459",
+      "split": "test",
+      "condition": "dark_blur",
+      "count": 4,
+      "prediction": [
+        [
+          360,
+          56,
+          57,
+          71
+        ],
+        [
+          41,
+          59,
+          83,
+          104
+        ],
+        [
+          404,
+          280,
+          53,
+          63
+        ],
+        [
+          66,
+          330,
+          67,
+          79
+        ]
+      ],
+      "pred_count": 4,
+      "elapsed_ms": 17.548600008012727,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/070.png",
+      "sha256": "9ee367d507265c594cd89e4cf900ec8af5bb3c4a6919e110a4cb34ba64a6bd86",
+      "split": "test",
+      "condition": "dark_blur",
+      "count": 0,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 16.530599998077378,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/071.png",
+      "sha256": "5bf809dc7f3f92771fe412f322e53815fb57c25ee55fad3411cb7f5e21dd77e5",
+      "split": "test",
+      "condition": "dark_blur",
+      "count": 1,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 16.272100008791313,
+      "tp": 0,
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "file": "experiments/data/test/072.png",
+      "sha256": "12b3f30e7ac02125dedfb477b2a3bf8ee0d67e908186e3eec9d3585a71ccb81e",
+      "split": "test",
+      "condition": "dark_blur",
+      "count": 2,
+      "prediction": [
+        [
+          379,
+          21,
+          68,
+          84
+        ],
+        [
+          43,
+          62,
+          80,
+          103
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 17.078000004403293,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/073.png",
+      "sha256": "ed6a8d205466d2014b6b4a12a59249f6064f313a7aa403e50d26f0699c42884b",
+      "split": "test",
+      "condition": "dark_blur",
+      "count": 3,
+      "prediction": [
+        [
+          384,
+          65,
+          53,
+          65
+        ],
+        [
+          82,
+          77,
+          54,
+          67
+        ],
+        [
+          62,
+          301,
+          53,
+          65
+        ]
+      ],
+      "pred_count": 3,
+      "elapsed_ms": 16.563699988182634,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/074.png",
+      "sha256": "febe7de2b2631b9172613d147bdf0139a6d6f5375a521d257ac397eae1480e41",
+      "split": "test",
+      "condition": "dark_blur",
+      "count": 4,
+      "prediction": [
+        [
+          33,
+          51,
+          79,
+          96
+        ],
+        [
+          350,
+          278,
+          52,
+          61
+        ],
+        [
+          43,
+          311,
+          82,
+          97
+        ]
+      ],
+      "pred_count": 3,
+      "elapsed_ms": 18.53760000085458,
+      "tp": 3,
+      "fp": 0,
+      "fn": 1
+    },
+    {
+      "file": "experiments/data/test/075.png",
+      "sha256": "a0a5c7179565a4e45fe8b10d77b669f8c1603dcb5983459d28df1cdb4c9af1a6",
+      "split": "test",
+      "condition": "dark_blur",
+      "count": 0,
+      "prediction": [],
+      "pred_count": 0,
+      "elapsed_ms": 17.889900016598403,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/076.png",
+      "sha256": "ddf6894bba58a13cc405700dbbb3718542a81956f4f2f7eaf86ea88008309de2",
+      "split": "test",
+      "condition": "dark_blur",
+      "count": 1,
+      "prediction": [
+        [
+          38,
+          24,
+          59,
+          75
+        ]
+      ],
+      "pred_count": 1,
+      "elapsed_ms": 15.399399999296293,
+      "tp": 1,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/077.png",
+      "sha256": "2286d1bd3951386d4cdae4b3a15bf0164895b30586fcac4d224e3e126436dbe9",
+      "split": "test",
+      "condition": "dark_blur",
+      "count": 2,
+      "prediction": [
+        [
+          29,
+          24,
+          51,
+          64
+        ],
+        [
+          350,
+          86,
+          69,
+          86
+        ]
+      ],
+      "pred_count": 2,
+      "elapsed_ms": 16.813800000818446,
+      "tp": 2,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/078.png",
+      "sha256": "0fd60eb58f000d40be0ab2318249d453a10e6dbcc97a434761d1d59799dbe466",
+      "split": "test",
+      "condition": "dark_blur",
+      "count": 3,
+      "prediction": [
+        [
+          381,
+          50,
+          62,
+          74
+        ],
+        [
+          47,
+          61,
+          80,
+          103
+        ],
+        [
+          67,
+          294,
+          66,
+          81
+        ]
+      ],
+      "pred_count": 3,
+      "elapsed_ms": 16.33299997774884,
+      "tp": 3,
+      "fp": 0,
+      "fn": 0
+    },
+    {
+      "file": "experiments/data/test/079.png",
+      "sha256": "4d8835411a5ebb2f43685f260a01df86f8a20dc7cb5777c94d3e1f3f3cd6e9b1",
+      "split": "test",
+      "condition": "dark_blur",
+      "count": 4,
+      "prediction": [
+        [
+          347,
+          41,
+          71,
+          87
+        ],
+        [
+          68,
+          53,
+          49,
+          60
+        ],
+        [
+          79,
+          268,
+          58,
+          70
+        ],
+        [
+          369,
+          277,
+          59,
+          69
+        ]
+      ],
+      "pred_count": 4,
+      "elapsed_ms": 16.731100011384115,
+      "tp": 4,
+      "fp": 0,
+      "fn": 0
+    }
+  ]
+}

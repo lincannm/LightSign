@@ -57,8 +57,9 @@ try {
     Write-Host '[1/3] 检查项目文件和 uv 环境管理工具...'
     $requiredFiles = @(
         'run.py', 'app.py', 'participant.py', 'pyproject.toml', 'uv.lock',
-        'light_sign\store.py', 'models\policy.json',
-        'models\haarcascade_frontalface_default.xml'
+        'light_sign\store.py', 'light_sign\vision.py',
+        'models\yunet_policy.json', 'models\yunet.provenance.json',
+        'models\face_detection_yunet_2023mar.onnx', 'models\LICENSE.yunet'
     )
     foreach ($name in $requiredFiles) {
         if (-not (Test-Path -LiteralPath (Join-Path $root $name) -PathType Leaf)) {
