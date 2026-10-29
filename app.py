@@ -35,7 +35,14 @@ with tabs[0]:
     except ValueError as ex:st.error(str(ex))
   with activity_selector:
    if events:
-    eid=st.selectbox('选择活动',[r['id']for r in events],key='selected_event',format_func=lambda x:next(r['title']+(' · 开放'if r['active']else' · 已关闭')for r in events if r['id']==x))
+    ids=[r['id']for r in events]
+    selected=st.session_state.get('selected_event')
+    index=ids.index(selected)if selected in ids else 0
+    # 选项文字包含开放状态；key 带上状态后，关闭活动会重建下拉框，
+    # 否则前端沿用缓存的旧文字，要展开下拉框才会变成“已关闭”。
+    selector_key='selected_event@'+','.join(f"{r['id']}:{int(r['active'])}"for r in events)
+    eid=st.selectbox('选择活动',ids,index=index,key=selector_key,format_func=lambda x:next(r['title']+(' · 开放'if r['active']else' · 已关闭')for r in events if r['id']==x))
+    st.session_state.selected_event=eid
    else:st.info('暂无活动，请在下方创建第一个活动。')
   if events:
    st.divider()

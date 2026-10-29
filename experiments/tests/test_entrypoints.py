@@ -249,6 +249,21 @@ class EntryPointTests(unittest.TestCase):
         self.assertEqual([checkbox.label for checkbox in app.checkbox], ["二维码自动刷新"])
         self.assertTrue(app.checkbox[0].value)
 
+    def test_closed_event_relabels_selector_without_expanding_it(self):
+        app = organizer_app()
+        selector = next(item for item in app.selectbox if item.label == "选择活动")
+        original_id = selector.id
+        self.assertEqual(selector.options, ["入口测试活动 · 开放"])
+
+        next(button for button in app.button if button.label == "关闭活动").click().run()
+        self.assertEqual(len(app.exception), 0)
+        selector = next(item for item in app.selectbox if item.label == "选择活动")
+        # 标签文字变化时必须换掉 widget id，否则前端会沿用缓存的旧文字。
+        self.assertNotEqual(selector.id, original_id)
+        self.assertEqual(selector.options, ["入口测试活动 · 已关闭"])
+        self.assertEqual(selector.value, self.event)
+        self.assertEqual(app.session_state.selected_event, self.event)
+
     def test_organizer_runs_when_experiment_records_are_unavailable(self):
         read_text = Path.read_text
         for error in (FileNotFoundError("experiment records omitted"),
