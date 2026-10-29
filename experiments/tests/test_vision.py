@@ -29,6 +29,8 @@ class CounterTests(unittest.TestCase):
         self.assertEqual(len(result['scores']), 4)
         self.assertEqual(safe.size, (640, 480))
 
+    @unittest.skipUnless((ROOT / 'samples_yunet' / 'annotations.json').is_file(),
+                         'samples_yunet 标注集只保留在本地，不随发布包分发')
     def test_yunet_test_set_is_readable_without_using_predictions_as_labels(self):
         annotations = json.loads((ROOT / 'samples_yunet' / 'annotations.json').read_text(encoding='utf-8'))
         self.assertEqual(set(annotations['images']), {'1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg'})
